@@ -164,9 +164,9 @@ Please note that station with static IP configuration usually connects to the ne
 SDK Connect
 ^^^^^^^^^^^
 
-SDK auto connect can be twice as fast as begin, partly because it runs before user code. How fast? Expect 1st connection around the 220 ms mark, while reconnects take about 160 ms, on a not very busy wlan with a signal strength about -60dB. The SDK connect method is valuable to projects that demand the quickest wifi ready, or if using battery power, the esp8266 can save radio energy by spending less time with the radio on.
+SDK auto connect can be twice as fast as begin, partly because it runs before user code. How fast? Expect 1st connection around the 220 ms mark, while reconnects take about 160 ms, on a not very busy wlan with a signal strength about -60dB. The SDK connect method is valuable to projects that demand the quickest wifi ready. For example, if battery powered, the esp8266 can save radio energy by spending less time with the radio on.
 
-SDK connect totally relies on the correct wifi settings saved in flash. If the setting need updating, we can call begin one time. We don't even have to connect (5th param false as in the example code below. The more args you can pass to begin, the quicker the connections will be.
+SDK connect totally relies on the correct wifi settings saved in flash. If the setting need updating, we can call begin one time. We don't even have to connect (5th param false as in the example code below. The more args you pass to begin, the quicker the connections will be.
 
 WiFi.config can also make SDK connect a little quicker, but it really helps begin much more.
 
@@ -174,66 +174,61 @@ WiFi.config can also make SDK connect a little quicker, but it really helps begi
 
 .. code:: cpp
 
-#define MS Serial.print(millis());  Serial.write(' ');
+   #define MS Serial.print(millis());  Serial.write(' ');
 
-#include <ESP8266WiFi.h>
+   #include <ESP8266WiFi.h>
 
-const char* ssid        = "A28";                                // max strlen 32
-const char* passkey     = "4CuauhtemocInternet4";               // max strlen 63, or 64 if hexadecimal string
-int8_t      channel     = 1;                                    // choose the fastest/best on local wlan
-uint8_t     bssid[6]    = {0xA4, 0xB1, 0xE9, 0xCC, 0x6A, 0x28}; // can use wifiscan example to get bssid
+   const char* ssid        = "A28";                                // max strlen 32
+   const char* passkey     = "4CuauhtemocInternet4";               // max strlen 63, or 64 if hexadecimal string
+   int8_t      channel     = 1;                                    // choose the fastest/best on local wlan
+   uint8_t     bssid[6]    = {0xA4, 0xB1, 0xE9, 0xCC, 0x6A, 0x28}; // can use wifiscan example to get bssid
 
-IPAddress staIP         = {192,168,1,69};
-IPAddress gateway       = {192,168,1,254};
-IPAddress subnet        = {255,255,255,0};
+   IPAddress staIP         = {192,168,1,69};
+   IPAddress gateway       = {192,168,1,254};
+   IPAddress subnet        = {255,255,255,0};
 
-void setup()
-{
-    Serial.begin(115200);
-    enableWiFiAtBootTime();  // prevents shutdown of sdk connect
-    //Serial.setDebugOutput(false);  // default true since core 3.0
-    if (! WiFi.config(staIP, gateway, subnet)) {
-        Serial.println(F("WiFi.config failed; DHCP will add ~2 sec to connect time; check the static IPs."));
-    }
+   void setup()
+   {
+       Serial.begin(115200);
+       enableWiFiAtBootTime();  // prevents shutdown of sdk connect
+       //Serial.setDebugOutput(false);  // default true since core 3.0
+       if (! WiFi.config(staIP, gateway, subnet)) {
+           Serial.println(F("WiFi.config failed; DHCP will add ~2 sec to connect time; check the static IPs."));
+       }
 
-    // Do we need to call begin to update wifi settings in flash?
-    //  Only if sketch & flash are not the same (changed), else just wait for sdk to connect
-    struct station_config wl_args;
-    wifi_station_get_config (&wl_args);
-    if (strcmp(reinterpret_cast<const char*>(wl_args.ssid), ssid) != 0 ||
-        strcmp(reinterpret_cast<const char*>(wl_args.password), passkey) != 0) {          // need to erase/rewrite station_config
-        if (WiFi.getMode() != 1) WiFi.mode(WIFI_STA);
-        WiFi.persistent(true);          // needed persist(true) or enableWiFiAtBootTime(), or settings not saved to flash
-        wl_status_t ret = WiFi.begin(ssid, passkey, channel, bssid, false);  // do not connect, but write flash if different
-        MS Serial.printf(PSTR("Wifi args updated in flash, ssid='%s' passkey='%s' channel=%d bssid=" MACSTR),
-                                                                ssid, passkey, channel, MAC2STR(bssid));
-        ESP.restart();  // Restarting to test newly updated station_config"));
-    }
-}
+       // Do we need to call begin to update wifi settings in flash?
+       //  Only if sketch & flash are not the same (changed), else just wait for sdk to connect
+       struct station_config wl_args;
+       wifi_station_get_config (&wl_args);
+       if (strcmp(reinterpret_cast<const char*>(wl_args.ssid), ssid) != 0 ||
+           strcmp(reinterpret_cast<const char*>(wl_args.password), passkey) != 0) {          // need to erase/rewrite station_config
+           if (WiFi.getMode() != 1) WiFi.mode(WIFI_STA);
+           WiFi.persistent(true);          // needed persist(true) or enableWiFiAtBootTime(), or settings not saved to flash
+           wl_status_t ret = WiFi.begin(ssid, passkey, channel, bssid, false);  // do not connect, but write flash if different
+           MS Serial.printf(PSTR("Wifi args updated in flash, ssid='%s' passkey='%s' channel=%d bssid=" MACSTR),
+                                                                   ssid, passkey, channel, MAC2STR(bssid));
+           ESP.restart();  // Restarting to test newly updated station_config"));
+       }
+   }
 
-void loop()
-{
-    static bool waitWifi = true;
-    if (WiFi.status() == WL_CONNECTED && waitWifi) {  // async wait, do something in the ms you wait for wifi
-        MS Serial.println("WL_CONNECTED, cycle wifi mode off, then sta, before reconnecting");
-        // cycle wifi mode thru off back to sta to slow this demo down about 190 ms/cycle 
-        // Note: OFF disconnects, but do not erase flash wifi settings
-//        WiFi.mode(WIFI_OFF);  WiFi.mode(WIFI_STA);  // comment this line to see sdk's potential (about 5 reconnects/sec)
-        waitWifi = WiFi.reconnect();
-        MS Serial.println("Attempting to reconnect wifi...");
-    }
-}
+   void loop()
+   {
+       static bool waitWifi = true;
+       if (WiFi.status() == WL_CONNECTED && waitWifi) {  // async wait, do something in the ms you wait for wifi
+           MS Serial.println("WL_CONNECTED, cycle wifi mode off, then sta, before reconnecting");
+           // cycle wifi mode thru off back to sta to slow this demo down about 190 ms/cycle 
+           // Note: OFF disconnects, but do not erase flash wifi settings
+   //        WiFi.mode(WIFI_OFF);  WiFi.mode(WIFI_STA);  // comment this line to see sdk's potential (about 5 reconnects/sec)
+           waitWifi = WiFi.reconnect();
+           MS Serial.println("Attempting to reconnect wifi...");
+       }
+   }
 
 *Example output:*
 
 ::
 
     Wifi connected in 220 ms
-    .
-    Connected, IP: 192.168.1.22
-
-Please note that station with static IP configuration usually connects to the network faster. In the above example it took about 500ms (one dot `.` displayed). This is because obtaining of IP configuration by DHCP client takes time and in this case this step is skipped. If you pass all three parameter as 0.0.0.0 (local_ip, gateway and subnet), it will re enable DHCP. You need to re-connect the device to get new IPs.
-
 
 
 Manage Connection
