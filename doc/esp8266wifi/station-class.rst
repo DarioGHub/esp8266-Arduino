@@ -163,6 +163,55 @@ Please note that station with static IP configuration usually connects to the ne
 
 SDK Connect
 ^^^^^^^^^^^
+SDK auto connect can be twice as fast as begin, partly because it runs before user code. How fast? Expect 1st connection around the 220 ms mark, while reconnects take about 160 ms, on a wlan with a signal strength about -60dB and a not very busy AP. The SDK connect method is valuable to projects that frequently restart, or if using battery power, the esp8266 can minimize the radio energy consumption by spending less time with the radio on.
+
+SDK connect totally relies on the correct wifi settings saved in flash. If the setting need updating, we can call begin one time. We don't even have to connect (5th param false as in the example code below. The more args you can pass to begin, the quicker the connections will be.
+
+WiFi.config can also make SDK connect a little quicker, but it really helps begin much more.
+
+*Example code:*
+
+.. code:: cpp
+
+    #include <ESP8266WiFi.h>
+
+    const char* ssid = "********";
+    const char* passphrase = "********";
+
+    IPAddress staIP(192,168,1,22);
+    IPAddress gateway(192,168,1,9);
+    IPAddress subnet(255,255,255,0);
+
+    void setup(void)
+    {
+      Serial.begin(115200);
+      Serial.println();
+ 
+      Serial.printf("Connecting to %s\n", ssid);
+      WiFi.config(staIP, gateway, subnet);
+      WiFi.begin(ssid, passphrase, channel, bssid, false);   // no connect, but write args to flash
+      while (WiFi.status() != WL_CONNECTED)
+      {
+        delay(500);
+        Serial.print(".");
+      }
+      Serial.println();
+      Serial.print("Connected, IP address: ");
+      Serial.println(WiFi.localIP());
+    }
+
+    void loop() {}
+
+*Example output:*
+
+::
+
+    Wifi connected in 220 ms
+    .
+    Connected, IP: 192.168.1.22
+
+Please note that station with static IP configuration usually connects to the network faster. In the above example it took about 500ms (one dot `.` displayed). This is because obtaining of IP configuration by DHCP client takes time and in this case this step is skipped. If you pass all three parameter as 0.0.0.0 (local_ip, gateway and subnet), it will re enable DHCP. You need to re-connect the device to get new IPs.
+
 
 
 Manage Connection
