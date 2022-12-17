@@ -5,7 +5,7 @@ Station Class
 
 The number of features provided by ESP8266 in the station mode is far more extensive than covered in original `Arduino WiFi library <https://www.arduino.cc/en/Reference/WiFi>`__. Therefore, instead of supplementing original documentation, we have decided to write a new one from scratch.
 
-Description of station class has been broken down into four parts. First discusses methods to establish connection to an access point. Second provides methods to manage connection like e.g. ``reconnect`` or ``isConnected``. Third covers properties to obtain information about connection like MAC or IP address. Finally the fourth section provides alternate methods to connect like e.g. Wi-Fi Protected Setup (WPS).
+Description of station class has been broken down into four parts. First discusses methods to establish connection to an access point (AP). Second provides methods to manage connection like e.g. ``reconnect`` or ``isConnected``. Third covers properties to obtain information about connection like MAC or IP address. Finally the fourth section provides alternate methods to connect like e.g. Wi-Fi Protected Setup (WPS).
 
 Table of Contents
 -----------------
@@ -41,6 +41,7 @@ Table of Contents
 
 -  `Connect Different <#connect-different>`__
 
+   -  `SDK Auto Connect <#sdk-auto>`__
    -  `WPS <#wps>`__
    -  `Smart Config <#smart-config>`__
 
@@ -62,8 +63,8 @@ By default, ESP will attempt to reconnect to Wi-Fi network whenever it is discon
 begin
 ^^^^^
 
-There are several versions (called `function overloads <https://en.wikipedia.org/wiki/Function_overloading>`__ in C++) of ``begin`` function. One was presented just above:
-``WiFi.begin(ssid, password)``. Overloads provide flexibility in number or type of accepted parameters.
+There are several ``begin`` `function <https://en.wikipedia.org/wiki/Function_overloading> overloads`__ (versions). One was presented just above:
+``WiFi.begin(ssid, password)``. Overloads provide flexibility in number or type of accepted parameters, and the easiest way to update the 'wifi config' saved in flash. -- see SDK Auto Connect below.
 
 The simplest overload of ``begin`` is as follows:
 
@@ -71,7 +72,7 @@ The simplest overload of ``begin`` is as follows:
 
     WiFi.begin()
 
-Calling it will enable station mode and connect to the last used access point based on configuration saved in flash memory.
+Calling it will enable station mode and connect to the last access point saved in flash memory.
 
 Notes:
 
