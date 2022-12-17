@@ -5,7 +5,7 @@ Station Class
 
 The number of features provided by ESP8266 in the station mode is far more extensive than covered in original `Arduino WiFi library <https://www.arduino.cc/en/Reference/WiFi>`__. Therefore, instead of supplementing original documentation, we have decided to write a new one from scratch.
 
-Description of station class has been broken down into four parts. First discusses methods to connect to an access point (AP). Second provides methods to manage connection like e.g. ``reconnect`` or ``isConnected``. Third covers properties to obtain information about connection like MAC or IP address. Finally the fourth section provides alternate methods to connect like e.g. Wi-Fi Protected Setup (WPS).
+Description of station class has been broken down into four parts. First discusses methods to connect to an access point (AP). Second provides methods to manage the connection like e.g. ``reconnect`` or ``isConnected``. Third covers properties to obtain information about the connection like MAC or IP address. Finally the fourth section provides alternate methods to connect like e.g. Wi-Fi Protected Setup (WPS).
 
 Table of Contents
 -----------------
@@ -14,6 +14,7 @@ Table of Contents
 
    -  `begin <#begin>`__
    -  `config <#config>`__
+   -  `SDK Connect <#sdk-auto>`__
 
 -  `Manage Connection <#manage-connection>`__
 
@@ -41,7 +42,6 @@ Table of Contents
 
 -  `Connect Different <#connect-different>`__
 
-   -  `SDK Auto Connect <#sdk-auto>`__
    -  `WPS <#wps>`__
    -  `Smart Config <#smart-config>`__
 
@@ -159,6 +159,10 @@ The following IP configuration may be provided:
     Connected, IP address: 192.168.1.22
 
 Please note that station with static IP configuration usually connects to the network faster. In the above example it took about 500ms (one dot `.` displayed). This is because obtaining of IP configuration by DHCP client takes time and in this case this step is skipped. If you pass all three parameter as 0.0.0.0 (local_ip, gateway and subnet), it will re enable DHCP. You need to re-connect the device to get new IPs.
+
+
+SDK Connect
+^^^^^^^^^^^
 
 
 Manage Connection
