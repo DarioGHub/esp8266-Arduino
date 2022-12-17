@@ -5,12 +5,12 @@ Station Class
 
 The number of features provided by ESP8266 in the station mode is far more extensive than covered in original `Arduino WiFi library <https://www.arduino.cc/en/Reference/WiFi>`__. Therefore, instead of supplementing original documentation, we have decided to write a new one from scratch.
 
-Description of station class has been broken down into four parts. First discusses methods to establish connection to an access point (AP). Second provides methods to manage connection like e.g. ``reconnect`` or ``isConnected``. Third covers properties to obtain information about connection like MAC or IP address. Finally the fourth section provides alternate methods to connect like e.g. Wi-Fi Protected Setup (WPS).
+Description of station class has been broken down into four parts. First discusses methods to connect to an access point (AP). Second provides methods to manage connection like e.g. ``reconnect`` or ``isConnected``. Third covers properties to obtain information about connection like MAC or IP address. Finally the fourth section provides alternate methods to connect like e.g. Wi-Fi Protected Setup (WPS).
 
 Table of Contents
 -----------------
 
--  `Start Here <#start-here>`__
+-  `Connect to Wifi <#start-here>`__
 
    -  `begin <#begin>`__
    -  `config <#config>`__
@@ -49,7 +49,7 @@ Points below provide description and code snippets how to use particular methods
 
 For more code samples please refer to separate section with `examples <station-examples.rst>`__ dedicated specifically to the Station Class.
 
-Start Here
+Start to Connect Wifi
 ~~~~~~~~~~
 
 Switching the module to Station mode is done with ``begin`` function. Typical parameters passed to ``begin`` include SSID and password, so module can connect to specific Access Point.
