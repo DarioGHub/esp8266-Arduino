@@ -51,7 +51,7 @@ For more code samples please refer to separate section with `examples <station-e
 Start Here
 ~~~~~~~~~~
 
-Switching the module to Station mode is done with ``begin`` function. Typical parameters passed to ``begin`` include SSID and password, so module can connect to specific Access Point.
+Switching the module to Station mode is done with ``begin`` function. Typical parameters passed to ``begin`` include SSID and password, so module can connect to specific Access Point. 
 
 .. code:: cpp
 
