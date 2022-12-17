@@ -14,7 +14,7 @@ Table of Contents
 
    -  `begin <#begin>`__
    -  `config <#config>`__
-   -  `SDK Connect <#sdk-auto>`__
+   -  `SDK Connect <#sdk-connect>`__
 
 -  `Manage Connection <#manage-connection>`__
 
