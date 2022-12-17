@@ -163,7 +163,8 @@ Please note that station with static IP configuration usually connects to the ne
 
 SDK Connect
 ^^^^^^^^^^^
-SDK auto connect can be twice as fast as begin, partly because it runs before user code. How fast? Expect 1st connection around the 220 ms mark, while reconnects take about 160 ms, on a wlan with a signal strength about -60dB and a not very busy AP. The SDK connect method is valuable to projects that frequently restart, or if using battery power, the esp8266 can minimize the radio energy consumption by spending less time with the radio on.
+
+SDK auto connect can be twice as fast as begin, partly because it runs before user code. How fast? Expect 1st connection around the 220 ms mark, while reconnects take about 160 ms, on a not very busy wlan with a signal strength about -60dB. The SDK connect method is valuable to projects that demand the quickest wifi ready, or if using battery power, the esp8266 can save radio energy by spending less time with the radio on.
 
 SDK connect totally relies on the correct wifi settings saved in flash. If the setting need updating, we can call begin one time. We don't even have to connect (5th param false as in the example code below. The more args you can pass to begin, the quicker the connections will be.
 
