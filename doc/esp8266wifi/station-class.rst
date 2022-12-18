@@ -572,7 +572,7 @@ Particular connection statuses 6 and 3 may be looked up in `wl\_definitions.h <h
     3 - WL_CONNECTED
     7 - WL_DISCONNECTED
 
-Basing on this example, when running above code, module is initially disconnected from the network and returns connection status ``6 - WL_DISCONNECTED``. It is also disconnected immediately after running ``WiFi.begin(ssid, passphrase)``. Then after about 3 seconds (basing on number of dots displayed every 500ms), it finally gets connected returning status ``3 - WL_CONNECTED``.
+Basing on this example, when running above code, module is initially disconnected from the network and returns connection status ``7 - WL_DISCONNECTED``. It is also disconnected immediately after running ``WiFi.begin(ssid, passphrase)``. Then after about 3 seconds (basing on number of dots displayed every 500ms), it finally gets connected returning status ``3 - WL_CONNECTED``.
 
 SSID
 ^^^^
