@@ -50,7 +50,7 @@ Points below provide description and code snippets how to use particular methods
 For more code samples please refer to separate section with `examples <station-examples.rst>`__ dedicated specifically to the Station Class.
 
 Start to Connect Wifi
-~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
 
 Add a line to set the device into a known wifi mode, start with ``WiFi.mode(WIFI_STA)``. SoftAP mode can be explored later. Typical parameters passed to ``begin`` include SSID and passphrase, so module can connect to specific Access Point.
 
@@ -86,9 +86,9 @@ Below is the syntax of another overload of ``begin`` with the all possible param
 Meaning of parameters is as follows:
 
 - ``ssid`` - a character string containing the SSID of Access Point we would like to connect to, may have up to 32 characters
-- ``passphrase`` to the access point, a character string that should be minimum 8 characters long and not longer than 64 characters 
-- ``channel`` of AP, if we like to operate using specific channel, otherwise this parameter may be omitted 
-- ``bssid`` - mac address of AP, this parameter is also optional 
+- ``passphrase`` to the access point, strlen max 63, or 64 if a hexadecimal string, while it can be minimum 8, circa core 3, 18 would be appropriate.
+- ``channel`` of AP, if we like to operate using specific channel, some may be faster than others, if this parameter is omitted, time is used to negotiate.
+- ``bssid`` - mac address of AP, this parameter is also optional, but will make connections quicker, as some net scanning may be skipped.
 - ``connect`` - a ``boolean`` parameter that if set to ``false``, will instruct module just to save the other parameters without actually establishing connection to the access point
 
 config
