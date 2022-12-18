@@ -513,7 +513,7 @@ Input parameter ``aHostname`` may be a type of ``char*``, ``const char*`` or ``S
 status
 ^^^^^^
 
-Returns the status of the Wifi connection.
+Returns the status of the wifi connection.
 
 .. code:: cpp
 
@@ -530,7 +530,7 @@ One of the following values of type of ``wl_status_t`` as defined in `wl\_defini
 - ``WL_WRONG_PASSWORD`` 6, passphrase is too long
 - ``WL_DISCONNECTED`` 7, wifi is on, but not connected to an access point
 
-Wifi status is also the return type of other WiFi methods.
+``wl_status_t`` is also the return type of other WiFi methods.
 .. code:: cpp
 
     wl_status_t status = WiFi.begin();
@@ -542,14 +542,17 @@ Wifi status is also the return type of other WiFi methods.
 .. code:: cpp
 
     #include <ESP8266WiFi.h>
+    
+    const char *ssid = "sensor-net";
+    const char *passphrase = "Planetary_Unique pa55phrase";
 
     void setup(void)
     {
       Serial.begin(115200);
       Serial.printf("Connection status: %d\n", WiFi.status());
       Serial.printf("Connecting to %s\n", ssid);
-      WiFi.begin(ssid, passphrase);
-      Serial.printf("Connection status: %d\n", WiFi.status());
+      wl_status_t status = WiFi.begin(ssid, passphrase);
+      Serial.printf("WiFi.begin returned status: %d\n", status);
       while (WiFi.status() != WL_CONNECTED)
       {
         delay(500);
@@ -566,21 +569,20 @@ Wifi status is also the return type of other WiFi methods.
 
 ::
 
-    Connection status: 6
+    Connection status: 7
     Connecting to sensor-net
-    Connection status: 6
+    WiFi.begin returned status: 7
     ......
     Connection status: 3
     Connected, IP address: 192.168.1.10
-
-Particular connection statuses 6 and 3 may be looked up in `wl\_definitions.h <https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WiFi/src/include/wl_definitions.h>`__ as follows:
 
 ::
 
     3 - WL_CONNECTED
     7 - WL_DISCONNECTED
 
-Basing on this example, when running above code, module is initially disconnected from the network and returns connection status ``7 - WL_DISCONNECTED``. It is also disconnected immediately after running ``WiFi.begin(ssid, passphrase)``. Then after about 3 seconds (basing on number of dots displayed every 500ms), it finally gets connected returning status ``3 - WL_CONNECTED``.
+See `status <#status>`__ for other return values.
+
 
 SSID
 ^^^^
