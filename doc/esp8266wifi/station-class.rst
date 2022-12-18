@@ -513,21 +513,25 @@ Input parameter ``aHostname`` may be a type of ``char*``, ``const char*`` or ``S
 status
 ^^^^^^
 
-Return the status of Wi-Fi connection.
+Returns the status of the Wifi connection.
 
 .. code:: cpp
 
-    WiFi.status()
+    wl_status_t status = WiFi.status();
+    wl_status_t status = WiFi.begin();
+    wl_status_t status = WiFi.waitForConnectResult();
 
-Function returns one of the following connection statuses:
+One of the following values of type of ``wl_status_t`` as defined in `wl\_definitions.h <https://github.com/esp8266/Arduino/blob/master/cores/esp8266/wl_definitions.h>`__
 
-- ``WL_CONNECTED`` after successful connection is established
-- ``WL_NO_SSID_AVAIL`` in case configured SSID cannot be reached
-- ``WL_CONNECT_FAILED`` if passphrase is incorrect
-- ``WL_IDLE_STATUS`` when Wi-Fi is in process of changing between statuses
-- ``WL_DISCONNECTED`` if module is not configured in station mode
+- ``WL_IDLE_STATUS`` 0, when Wi-Fi is in process of changing between statuses
+- ``WL_NO_SSID_AVAIL`` 1, configured SSID cannot be reached
+- ``WL_SCAN_COMPLETED`` 2,
+- ``WL_CONNECTED`` 3, wifi connected
+- ``WL_CONNECT_FAILED`` 4, 
+- ``WL_CONNECTION_LOST`` 5,
+- ``WL_WRONG_PASSWORD`` 6, passphrase is too long
+- ``WL_DISCONNECTED`` 7, wifi is on, but not connected to an access point
 
-Returned value is type of ``wl_status_t`` defined in `wl\_definitions.h <https://github.com/esp8266/Arduino/blob/master/cores/esp8266/wl_definitions.h>`__
 
 *Example code:*
 
