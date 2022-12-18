@@ -12,6 +12,7 @@ Table of Contents
 
 -  `Connect to Wifi <#start-here>`__
 
+   -  `mode <#mode>`__
    -  `begin <#begin>`__
    -  `config <#config>`__
    -  `SDK Connect <#sdk-connect>`__
@@ -52,29 +53,56 @@ For more code samples please refer to separate section with `examples <station-e
 Start to Connect Wifi
 ~~~~~~~~~~~~~~~~~~~~~
 
-Add a line to set the device into a known wifi mode, start with ``WiFi.mode(WIFI_STA)``. SoftAP mode can be explored later. Typical parameters passed to ``begin`` include SSID and passphrase, so module can connect to specific Access Point.
+mode
+^^^^
+
+Prior to attempting to connect your device to a wifi access point (AP), set your device's wifi to a known mode. It is possible your device started up in WIFI_AP (SoftAP) mode, it want to be the AP. If we call ``begin`` it will add station mode, and your device would be in two modes.
 
 .. code:: cpp
 
-    WiFi.begin(ssid, passphrase)
+    WiFi.mode(wl_mode)
+
+wl_mode may be one of the following values of type of ``WiFiMode_t`` as defined in `wl\_ESP8266WiFiType.h <https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WiFi/src/ESP8266WiFiType.h>`__
+
+- ``WIFI_OFF``    0, wifi turned off
+- ``WIFI_STA``    1, wifi uses station mode, device can only connect to access points (APs)
+- ``WIFI_AP``     2, wifi uses access point mode, device can only accept connections from stations, it is the AP
+- ``WIFI_AP_STA`` 3, wifi uses two modes, device can simultaneously connect to other APs, and accepts connections from other stations
+ 
+Under some circumstances the dual mode is needed, but for now let's add a line ``WiFi.mode(WIFI_STA);``, to operate only in station mode.
+
+getMode
+^^^^^^^
+
+Returns the device's current wifi mode. Not specific to the station class, but related.
+
+.. code:: cpp
+
+    WiFi.getMode()
+
 
 begin
 ^^^^^
 
-There are several ``begin`` `function overloads <https://en.wikipedia.org/wiki/Function_overloading>`__ (versions). One was presented just above:
-``WiFi.begin(ssid, passphrase)``. Overloads provide flexibility in number or type of accepted parameters. They are also the easiest way to update the 'wifi config' saved in flash. -- see `SDK Connect <#sdk-connect>`__ below.
-
-The simplest overload of ``begin`` is as follows:
+There are several ``begin`` `function overloads <https://en.wikipedia.org/wiki/Function_overloading>`__ (versions) declared in . Overloads provide flexibility in number or type of accepted parameters. 
 
 .. code:: cpp
 
     WiFi.begin()
+    WiFi.begin(ssid, passphrase)
+    WiFi.begin(ssid, passphrase, channel, bssid)
+    WiFi.begin(ssid, passphrase, channel, bssid, connect)
+
+The begin overloads with params, can result in their args being saved in the 'wifi settings' area of flash. -- see `SDK Connect <#sdk-connect>`__ below.
+
+Calling the overload without params ``WiFi.begin()``, forces the use of those settings saved in flash.
+
+When passing  parameters passed to ``begin`` include SSID and passphrase, so module can connect to specific Access Point.
+
 
 Calling it will enable station mode and connect to the last access point saved in flash memory.
 
 Notes:
-
-- It is possible that calling ``begin`` will result in the module being in STA + softAP mode if the module was previously placed into AP mode. 
 - If you notice strange behavior with DNS or other network functionality, check which mode your module is in (see ``WiFi.getMode()`` in the `Generic Class Documentation <generic-class.rst#mode>`__).
 
 Below is the syntax of another overload of ``begin`` with the all possible parameters:
@@ -503,6 +531,7 @@ Input parameter ``aHostname`` may be a type of ``char*``, ``const char*`` or ``S
     Default hostname: ESP_081117
     New hostname: Station_Tester_02
 
+
 status
 ^^^^^^
 
@@ -514,14 +543,14 @@ Returns the status of the wifi connection.
 
 One of the following values of type of ``wl_status_t`` as defined in `wl\_definitions.h <https://github.com/esp8266/Arduino/blob/master/cores/esp8266/wl_definitions.h>`__
 
-- ``WL_IDLE_STATUS`` 0, when status is in process of changing
-- ``WL_NO_SSID_AVAIL`` 1, configured SSID cannot be reached
-- ``WL_SCAN_COMPLETED`` 2,
-- ``WL_CONNECTED`` 3, wifi connected
-- ``WL_CONNECT_FAILED`` 4, 
-- ``WL_CONNECTION_LOST`` 5,
-- ``WL_WRONG_PASSWORD`` 6, passphrase is too long
-- ``WL_DISCONNECTED`` 7, wifi is on, but not connected to an access point
+- ``WL_IDLE_STATUS``       0, when status is in process of changing
+- ``WL_NO_SSID_AVAIL``     1, configured SSID cannot be reached
+- ``WL_SCAN_COMPLETED``    2,
+- ``WL_CONNECTED``         3, wifi connected
+- ``WL_CONNECT_FAILED``    4, 
+- ``WL_CONNECTION_LOST``   5,
+- ``WL_WRONG_PASSWORD``    6, passphrase is too long
+- ``WL_DISCONNECTED``      7, wifi is on, but not connected to an access point
 
 ``wl_status_t`` is also the return type of other WiFi methods.
 
