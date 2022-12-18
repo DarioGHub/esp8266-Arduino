@@ -197,7 +197,7 @@ WiFi.config can also make SDK connect a little quicker, but it really helps begi
        }
 
        // Do we need to call begin to update wifi settings in flash?
-       //  Only if sketch & flash are not the same (changed), else just wait for sdk to connect
+       //  Only if sketch & flash settings are not the same (changed), else just wait for sdk to connect
        struct station_config wl_args;
        wifi_station_get_config (&wl_args);
        if (strcmp(reinterpret_cast<const char*>(wl_args.ssid), ssid) != 0 ||
@@ -215,10 +215,9 @@ WiFi.config can also make SDK connect a little quicker, but it really helps begi
    {
        static bool waitWifi = true;
        if (WiFi.status() == WL_CONNECTED && waitWifi) {  // async wait, do something in the ms you wait for wifi
-           MS Serial.println("WL_CONNECTED, cycle wifi mode off, then sta, before reconnecting");
-           // cycle wifi mode thru off back to sta to slow this demo down about 190 ms/cycle 
-           // Note: OFF disconnects, but do not erase flash wifi settings
-   //        WiFi.mode(WIFI_OFF);  WiFi.mode(WIFI_STA);  // comment this line to see sdk's potential (about 5 reconnects/sec)
+           MS Serial.println("WL_CONNECTED");
+           // cycle wifi mode thru off back to sta, adds about 190 ms here to slow down this demo
+           // WiFi.mode(WIFI_OFF);  WiFi.mode(WIFI_STA);  // comment to run full speed, OFF disconnects but does not erase flash wifi settings
            waitWifi = WiFi.reconnect();
            MS Serial.println("Attempting to reconnect wifi...");
        }
@@ -228,7 +227,10 @@ WiFi.config can also make SDK connect a little quicker, but it really helps begi
 
 ::
 
-    Wifi connected in 220 ms
+216 WL_CONNECTED
+223 Attempting to reconnect wifi...
+377 WL_CONNECTED
+
 
 
 Manage Connection
