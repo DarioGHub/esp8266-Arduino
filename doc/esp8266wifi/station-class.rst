@@ -531,6 +531,7 @@ One of the following values of type of ``wl_status_t`` as defined in `wl\_defini
 - ``WL_DISCONNECTED`` 7, wifi is on, but not connected to an access point
 
 ``wl_status_t`` is also the return type of other WiFi methods.
+
 .. code:: cpp
 
     wl_status_t status = WiFi.begin();
