@@ -227,9 +227,9 @@ WiFi.config can also make SDK connect a little quicker, but it really helps begi
 
 ::
 
-216 WL_CONNECTED
-223 Attempting to reconnect wifi...
-377 WL_CONNECTED
+   216 WL_CONNECTED
+   223 Attempting to reconnect wifi...
+   377 WL_CONNECTED
 
 
 
