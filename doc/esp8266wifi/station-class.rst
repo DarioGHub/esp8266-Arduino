@@ -56,7 +56,7 @@ Start to Connect Wifi
 mode
 ^^^^
 
-Prior to attempting to connect your device to a wifi access point (AP), set your device's wifi to a known mode. It is possible your device started up in WIFI_AP (SoftAP) mode, it want to be the AP. If we call ``begin`` it will add station mode, and your device would be in two modes.
+Prior to attempting to connect your device to a wifi access point (AP), set your device's wifi to a known mode. It is possible your device started up in WIFI_AP (SoftAP) mode, and if we call ``begin``, which adds station mode, your device would be in two modes.
 
 .. code:: cpp
 
@@ -69,16 +69,13 @@ wl_mode may be one of the following values of type of ``WiFiMode_t`` as defined 
 - ``WIFI_AP``     2, wifi uses access point mode, device can only accept connections from stations, it is the AP
 - ``WIFI_AP_STA`` 3, wifi uses two modes, device can simultaneously connect to other APs, and accepts connections from other stations
  
-Under some circumstances the dual mode is needed, but for now let's add a line ``WiFi.mode(WIFI_STA);``, to operate only in station mode.
-
-getMode
-^^^^^^^
-
-Returns the device's current wifi mode. Not specific to the station class, but related.
+For now let's add a line to place our device in station mode.
 
 .. code:: cpp
 
-    WiFi.getMode()
+    WiFi.mode(WIFI_STA);
+
+A related method, ``WiFi.getMode()`` may be used to check the `current wifi mode <#getMode>`__.
 
 
 begin
@@ -496,6 +493,15 @@ With the input parameter ``dns_no`` we can specify which Domain Name Server's IP
 ::
 
     DNS #1, #2 IP: 62.179.1.60, 62.179.1.61
+
+getMode
+^^^^^^^
+
+Returns the device's current wifi mode. Not specific to the station class, but related.
+
+.. code:: cpp
+
+    WiFi.getMode()
 
 hostname
 ^^^^^^^^
