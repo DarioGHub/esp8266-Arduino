@@ -114,7 +114,7 @@ Updated sketch for such scenario will look as follows:
     void setup()
     {
       Serial.begin(115200);
-      Serial.setDebugOutput(true);
+      //Serial.setDebugOutput(false);
       Serial.println();
 
       wifiMulti.addAP("primary-network-name", "pass-to-primary-network");
