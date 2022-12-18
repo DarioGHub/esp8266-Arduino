@@ -517,13 +517,11 @@ Returns the status of the Wifi connection.
 
 .. code:: cpp
 
-    wl_status_t status = WiFi.status();
-    wl_status_t status = WiFi.begin();
-    wl_status_t status = WiFi.waitForConnectResult();
+    WiFi.status()
 
 One of the following values of type of ``wl_status_t`` as defined in `wl\_definitions.h <https://github.com/esp8266/Arduino/blob/master/cores/esp8266/wl_definitions.h>`__
 
-- ``WL_IDLE_STATUS`` 0, when Wi-Fi is in process of changing between statuses
+- ``WL_IDLE_STATUS`` 0, when status is in process of changing
 - ``WL_NO_SSID_AVAIL`` 1, configured SSID cannot be reached
 - ``WL_SCAN_COMPLETED`` 2,
 - ``WL_CONNECTED`` 3, wifi connected
@@ -531,6 +529,12 @@ One of the following values of type of ``wl_status_t`` as defined in `wl\_defini
 - ``WL_CONNECTION_LOST`` 5,
 - ``WL_WRONG_PASSWORD`` 6, passphrase is too long
 - ``WL_DISCONNECTED`` 7, wifi is on, but not connected to an access point
+
+Wifi status is also the return type of other WiFi methods.
+.. code:: cpp
+
+    wl_status_t status = WiFi.begin();
+    wl_status_t status = WiFi.waitForConnectResult();
 
 
 *Example code:*
