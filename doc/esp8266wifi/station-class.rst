@@ -188,7 +188,7 @@ WiFi.config can also make SDK connect a little quicker, but it really helps begi
    void setup()
    {
        Serial.begin(115200);
-       enableWiFiAtBootTime();  // prevents shutdown of sdk connect
+       enableWiFiAtBootTime();  // prevents shutdown of sdk connect, obviates calling persistent(true)
        //Serial.setDebugOutput(false);  // default true since core 3.0
        if (! WiFi.config(staIP, gateway, subnet)) {
            Serial.println(F("WiFi.config failed; DHCP will add ~2 sec to connect time; check the static IPs."));
