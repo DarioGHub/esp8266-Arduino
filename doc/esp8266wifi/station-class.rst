@@ -52,7 +52,7 @@ For more code samples please refer to separate section with `examples <station-e
 Start to Connect Wifi
 ~~~~~~~~~~
 
-Switching the module to Station mode is done with ``begin`` function. Typical parameters passed to ``begin`` include SSID and password, so module can connect to specific Access Point.
+Calling the ``begin`` function also calls ``enableSTA(true)``, adding Station mode if it is missing. Typical parameters passed to ``begin`` include SSID and password, so module can connect to specific Access Point.
 
 .. code:: cpp
 
@@ -63,7 +63,7 @@ By default, ESP will attempt to reconnect to Wi-Fi network whenever it is discon
 begin
 ^^^^^
 
-There are several ``begin`` `function <https://en.wikipedia.org/wiki/Function_overloading> overloads`__ (versions). One was presented just above:
+There are several ``begin`` `function overloads <https://en.wikipedia.org/wiki/Function_overloading>`__ (versions). One was presented just above:
 ``WiFi.begin(ssid, password)``. Overloads provide flexibility in number or type of accepted parameters, and the easiest way to update the 'wifi config' saved in flash. -- see SDK Auto Connect below.
 
 The simplest overload of ``begin`` is as follows:
@@ -164,11 +164,11 @@ Please note that station with static IP configuration usually connects to the ne
 SDK Connect
 ^^^^^^^^^^^
 
-SDK auto connect can be twice as fast as begin, partly because it runs before user code. How fast? Expect 1st connection around the 220 ms mark, while reconnects take about 160 ms, on a not very busy wlan with a signal strength about -60dB. The SDK connect method is valuable to projects that demand the quickest wifi ready. For example, if battery powered, the esp8266 can save radio energy by spending less time with the radio on.
+SDK auto connect can be twice as fast as begin, partly because it runs before user code. How fast? Expect 1st connection around the 220 ms mark, while reconnects take about 160 ms, on a not very busy wlan with a signal strength about -60dB. The SDK connect method is valuable to projects that demand the quickest wifi ready. For example, if battery powered, the esp8266 can turn off the radio about a 1/4 second sooner than with begin.
 
-SDK connect totally relies on the correct wifi settings saved in flash. If the setting need updating, we can call begin one time. We don't even have to connect (5th param false as in the example code below. The more args you pass to begin, the quicker the connections will be.
+SDK connect completely relies on the correct wifi settings saved in flash. If the settings need updating, we can call begin one time. We don't even have to connect (5th param false as in the example code below). The more args you pass to begin, the quicker the connections will be.
 
-WiFi.config can also make SDK connect a little quicker, but it really helps begin much more.
+WiFi.config can also make SDK connect a little quicker, but it really helps begin much more. Try it.
 
 *Example code:*
 
@@ -178,10 +178,10 @@ WiFi.config can also make SDK connect a little quicker, but it really helps begi
 
    #include <ESP8266WiFi.h>
 
-   const char* ssid        = "A28";                                // max strlen 32
-   const char* passkey     = "4CuauhtemocInternet4";               // max strlen 63, or 64 if hexadecimal string
+   const char* ssid        = "********";                           // max strlen 32
+   const char* passkey     = "****************";                   // max strlen 63, or 64 if hexadecimal string
    int8_t      channel     = 1;                                    // choose the fastest/best on local wlan
-   uint8_t     bssid[6]    = {0xA4, 0xB1, 0xE9, 0xCC, 0x6A, 0x28}; // can use wifiscan example to get bssid
+   uint8_t     bssid[6]    = {0xA4, 0xB1, 0xE9, 0xCD, 0x6B, 0x29}; // can use wifiscan example, or AP's web mgmt site, to get bssid
 
    IPAddress staIP         = {192,168,1,69};
    IPAddress gateway       = {192,168,1,254};
