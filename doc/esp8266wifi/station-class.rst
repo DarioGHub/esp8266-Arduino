@@ -64,7 +64,7 @@ begin
 ^^^^^
 
 There are several ``begin`` `function overloads <https://en.wikipedia.org/wiki/Function_overloading>`__ (versions). One was presented just above:
-``WiFi.begin(ssid, password)``. Overloads provide flexibility in number or type of accepted parameters, and the easiest way to update the 'wifi config' saved in flash. -- see SDK Auto Connect below.
+``WiFi.begin(ssid, password)``. Overloads provide flexibility in number or type of accepted parameters. They are also the easiest way to update the 'wifi config' saved in flash. -- see `SDK Connect <#sdk-connect>`__ below.
 
 The simplest overload of ``begin`` is as follows:
 
