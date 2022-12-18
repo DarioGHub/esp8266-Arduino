@@ -194,8 +194,8 @@ WiFi.config can also make SDK connect a little quicker, but it really helps begi
            Serial.println(F("WiFi.config failed; DHCP will add ~2 sec to connect time; check the static IPs."));
        }
 
-       // Do we need to call begin to update wifi settings in flash?
-       //  Only if sketch & flash settings are not the same (changed), else just wait for sdk to connect
+       // Do we need to call begin to write new wifi settings in flash?
+       //  Only if sketch & flash settings are different (changed), else just wait for sdk to connect
        struct station_config wl_args;
        wifi_station_get_config (&wl_args);
        if (strcmp(reinterpret_cast<const char*>(wl_args.ssid), ssid) != 0 ||
