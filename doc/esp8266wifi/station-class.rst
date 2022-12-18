@@ -52,19 +52,17 @@ For more code samples please refer to separate section with `examples <station-e
 Start to Connect Wifi
 ~~~~~~~~~~
 
-Calling the ``begin`` function also calls ``enableSTA(true)``, adding Station mode if it is missing. Typical parameters passed to ``begin`` include SSID and password, so module can connect to specific Access Point.
+Add a line to set the device into a known wifi mode, start with ``WiFi.mode(WIFI_STA)``. SoftAP mode can be explored later. Typical parameters passed to ``begin`` include SSID and passphrase, so module can connect to specific Access Point.
 
 .. code:: cpp
 
-    WiFi.begin(ssid, password)
-
-By default, ESP will attempt to reconnect to Wi-Fi network whenever it is disconnected. There is no need to handle this by separate code. A good way to simulate disconnection would be to reset the access point. ESP will report disconnection, and then try to reconnect automatically.
+    WiFi.begin(ssid, passphrase)
 
 begin
 ^^^^^
 
 There are several ``begin`` `function overloads <https://en.wikipedia.org/wiki/Function_overloading>`__ (versions). One was presented just above:
-``WiFi.begin(ssid, password)``. Overloads provide flexibility in number or type of accepted parameters. They are also the easiest way to update the 'wifi config' saved in flash. -- see `SDK Connect <#sdk-connect>`__ below.
+``WiFi.begin(ssid, passphrase)``. Overloads provide flexibility in number or type of accepted parameters. They are also the easiest way to update the 'wifi config' saved in flash. -- see `SDK Connect <#sdk-connect>`__ below.
 
 The simplest overload of ``begin`` is as follows:
 
@@ -77,18 +75,18 @@ Calling it will enable station mode and connect to the last access point saved i
 Notes:
 
 - It is possible that calling ``begin`` will result in the module being in STA + softAP mode if the module was previously placed into AP mode. 
-- If you notice strange behavior with DNS or other network functionality, check which mode your module is in (see ``WiFi.mode()`` in the `Generic Class Documentation <generic-class.rst#mode>`__).
+- If you notice strange behavior with DNS or other network functionality, check which mode your module is in (see ``WiFi.getMode()`` in the `Generic Class Documentation <generic-class.rst#mode>`__).
 
 Below is the syntax of another overload of ``begin`` with the all possible parameters:
 
 .. code:: cpp
 
-    WiFi.begin(ssid, password, channel, bssid, connect)
+    WiFi.begin(ssid, passphrase, channel, bssid, connect)
 
 Meaning of parameters is as follows:
 
 - ``ssid`` - a character string containing the SSID of Access Point we would like to connect to, may have up to 32 characters
-- ``password`` to the access point, a character string that should be minimum 8 characters long and not longer than 64 characters 
+- ``passphrase`` to the access point, a character string that should be minimum 8 characters long and not longer than 64 characters 
 - ``channel`` of AP, if we like to operate using specific channel, otherwise this parameter may be omitted 
 - ``bssid`` - mac address of AP, this parameter is also optional 
 - ``connect`` - a ``boolean`` parameter that if set to ``false``, will instruct module just to save the other parameters without actually establishing connection to the access point
@@ -124,7 +122,7 @@ The following IP configuration may be provided:
     #include <ESP8266WiFi.h>
 
     const char* ssid = "********";
-    const char* password = "********";
+    const char* passphrase = "****************";
 
     IPAddress staticIP(192,168,1,22);
     IPAddress gateway(192,168,1,9);
@@ -137,7 +135,7 @@ The following IP configuration may be provided:
 
       Serial.printf("Connecting to %s\n", ssid);
       WiFi.config(staticIP, gateway, subnet);
-      WiFi.begin(ssid, password);
+      WiFi.begin(ssid, passphrase);
       while (WiFi.status() != WL_CONNECTED)
       {
         delay(500);
@@ -239,27 +237,30 @@ Manage Connection
 reconnect
 ^^^^^^^^^
 
-Reconnect the station. This is done by disconnecting from the access point an then initiating connection back to the same AP.
+Reconnect the station. This is done by disconnecting from the access point an then initiating connection back to the same AP. 
+By default, ESP will attempt to reconnect to Wi-Fi network whenever it is disconnected. There is no need to handle this by separate code. A good way to simulate disconnection would be to reset the access point. ESP will report disconnection, and then try to reconnect automatically.
+
 
 .. code:: cpp
 
-    WiFi.reconnect()
+    bool ret = WiFi.reconnect();
 
 Notes: 1. Station should be already connected to an access point. If this is not the case, then function will return ``false`` not performing any action. 2. If ``true`` is returned it means that connection sequence has been successfully started. User should still check for connection status, waiting until ``WL_CONNECTED`` is reported:
 
 .. code:: cpp
 
-    WiFi.reconnect();
-    while (WiFi.status() != WL_CONNECTED)
-    {
-      delay(500);
-      Serial.print(".");
+    if (WiFi.reconnect()) {
+       while (WiFi.status() != WL_CONNECTED)
+       {
+         delay(500);
+         Serial.print(".");
+       }
     }
 
 disconnect
 ^^^^^^^^^^
 
-Sets currently configured SSID and password to ``null`` values and disconnects the station from an access point.
+Sets currently configured SSID and passphrase to ``null`` values and disconnects the station from an access point.
 
 .. code:: cpp
 
@@ -325,7 +326,7 @@ Function returns one of the following connection statuses:
 - ``WL_CONNECTED`` after successful connection is established 
 - ``WL_NO_SSID_AVAIL`` in case configured SSID cannot be reached
 - ``WL_CONNECT_FAILED`` if connection failed 
-- ``WL_CONNECT_WRONG_PASSWORD`` if password is incorrect 
+- ``WL_CONNECT_WRONG_PASSWORD`` if passphrase is > 64 chars
 - ``WL_IDLE_STATUS`` when Wi-Fi is in process of changing between statuses 
 - ``WL_DISCONNECTED`` if module is not configured in station mode
 - ``-1`` on timeout
@@ -522,7 +523,7 @@ Function returns one of the following connection statuses:
 
 - ``WL_CONNECTED`` after successful connection is established
 - ``WL_NO_SSID_AVAIL`` in case configured SSID cannot be reached
-- ``WL_CONNECT_FAILED`` if password is incorrect
+- ``WL_CONNECT_FAILED`` if passphrase is incorrect
 - ``WL_IDLE_STATUS`` when Wi-Fi is in process of changing between statuses
 - ``WL_DISCONNECTED`` if module is not configured in station mode
 
@@ -539,7 +540,7 @@ Returned value is type of ``wl_status_t`` defined in `wl\_definitions.h <https:/
       Serial.begin(115200);
       Serial.printf("Connection status: %d\n", WiFi.status());
       Serial.printf("Connecting to %s\n", ssid);
-      WiFi.begin(ssid, password);
+      WiFi.begin(ssid, passphrase);
       Serial.printf("Connection status: %d\n", WiFi.status());
       while (WiFi.status() != WL_CONNECTED)
       {
@@ -569,9 +570,9 @@ Particular connection statuses 6 and 3 may be looked up in `wl\_definitions.h <h
 ::
 
     3 - WL_CONNECTED
-    6 - WL_DISCONNECTED
+    7 - WL_DISCONNECTED
 
-Basing on this example, when running above code, module is initially disconnected from the network and returns connection status ``6 - WL_DISCONNECTED``. It is also disconnected immediately after running ``WiFi.begin(ssid, password)``. Then after about 3 seconds (basing on number of dots displayed every 500ms), it finally gets connected returning status ``3 - WL_CONNECTED``.
+Basing on this example, when running above code, module is initially disconnected from the network and returns connection status ``6 - WL_DISCONNECTED``. It is also disconnected immediately after running ``WiFi.begin(ssid, passphrase)``. Then after about 3 seconds (basing on number of dots displayed every 500ms), it finally gets connected returning status ``3 - WL_CONNECTED``.
 
 SSID
 ^^^^
@@ -599,7 +600,7 @@ Returned value is of the ``String`` type.
 psk
 ^^^
 
-Return current pre shared key (password) associated with the Wi-Fi network.
+Return current pre shared key (passphrase) associated with the Wi-Fi network.
 
 .. code:: cpp
 
@@ -714,11 +715,11 @@ Depending on connection result function returns either ``true`` or ``false`` (``
 Smart Config
 ^^^^^^^^^^^^
 
-The Smart Config connection of an ESP module an access point is done by sniffing for special packets that contain SSID and password of desired AP. To do so the mobile device or computer should have functionality of broadcasting of encoded SSID and password.
+The Smart Config connection of an ESP module an access point is done by sniffing for special packets that contain SSID and passphrase of desired AP. To do so the mobile device or computer should have functionality of broadcasting of encoded SSID and passphrase.
 
 The following three functions are provided to implement Smart Config.
 
-Start smart configuration mode by sniffing for special packets that contain SSID and password of desired Access Point. Depending on result either ``true`` or ``false`` is returned.
+Start smart configuration mode by sniffing for special packets that contain SSID and passphrase of desired Access Point. Depending on result either ``true`` or ``false`` is returned.
 
 .. code:: cpp
 
