@@ -315,21 +315,14 @@ Note: running ``setAutoReconnect(true)`` when module is already disconnected wil
 waitForConnectResult
 ^^^^^^^^^^^^^^^^^^^^
 
-Wait until module connects to the access point. This function is intended for module configured in station or station + soft access point mode.
+Wait until module connects to the access point. This function is intended for modules in station, or station + softAP, wifi mode. ``waitForConnectResult()`` blocks code processing while waiting for a wifi connection.
 
 .. code:: cpp
 
     WiFi.waitForConnectResult()
 
-Function returns one of the following connection statuses: 
+Returns wifi connection `status <#status>`__
 
-- ``WL_CONNECTED`` after successful connection is established 
-- ``WL_NO_SSID_AVAIL`` in case configured SSID cannot be reached
-- ``WL_CONNECT_FAILED`` if connection failed 
-- ``WL_CONNECT_WRONG_PASSWORD`` if passphrase is > 64 chars
-- ``WL_IDLE_STATUS`` when Wi-Fi is in process of changing between statuses 
-- ``WL_DISCONNECTED`` if module is not configured in station mode
-- ``-1`` on timeout
 
 Configuration
 ~~~~~~~~~~~~~
