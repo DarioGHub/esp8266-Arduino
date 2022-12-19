@@ -5,6 +5,8 @@ Station Class
 
 The number of features provided by ESP8266 in the station mode is far more extensive than covered in original `Arduino WiFi library <https://www.arduino.cc/en/Reference/WiFi>`__. Therefore, instead of supplementing original documentation, we have decided to write a new one from scratch.
 
+This page is based on the `source code <https://github.com/esp8266/Arduino/blob/master/>`__.
+
 Description of station class has been broken down into four parts. First discusses methods to connect to an access point (AP). Second provides methods to manage the connection like e.g. ``reconnect`` or ``isConnected``. Third covers properties to obtain information about the connection like MAC or IP address. Finally the fourth section provides alternate methods to connect like e.g. Wi-Fi Protected Setup (WPS).
 
 Table of Contents
@@ -111,13 +113,17 @@ For a simple sketch to connect to an AP, just two args, SSID and passphrase, nee
 config
 ^^^^^^
 
-Disable `DHCP <https://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol>`__ client (Dynamic Host Configuration Protocol) and set the IP configuration of station interface to user defined arbitrary values. The interface will be a static IP configuration instead of values provided by DHCP.
+Configure static IP addresses for the station, thus disabling the `DHCP <https://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol>`__ (Dynamic Host Configuration Protocol) client. ``WiFi.config`` is called when we want the device to be ready quicker, or if we need the device to have the same IP each time it starts. Without overloads, ``WiFi.config`` can be still be called serveral ways. The first three params are required.
 
 .. code:: cpp
 
+    WiFi.config(local_ip, gateway, subnet)
+    WiFi.config(local_ip, gateway, subnet, dns1)
     WiFi.config(local_ip, gateway, subnet, dns1, dns2)
 
-Function will return ``true`` if configuration change is applied successfully. If configuration can not be applied, because e.g. module is not in station or station + soft access point mode, then ``false`` will be returned.
+``WiFi.config`` returns bool (true or false). ``true`` if configuration change is applied successfully. ``false`` if configuration could not be applied, if for example:
+-  the module is not in station or station + soft access point mode
+-  the local_ip and gateway are specified in different subnets, ``WiFi.config ({192,168,2,64},{192,168,1,254},{255,255,255,0});``
 
 The following IP configuration may be provided:
 
