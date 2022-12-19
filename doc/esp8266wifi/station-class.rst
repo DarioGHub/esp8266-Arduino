@@ -56,7 +56,7 @@ Start to Connect Wifi
 mode
 ^^^^
 
-Prior to attempting to connect your device to a wifi access point (AP), set your device's wifi to a known mode. It is possible your device started up in WIFI_AP (SoftAP) mode, and if we call ``begin``, which adds station mode, your device would be in two modes.
+Prior to attempting to connect your device to a wifi access point (AP), set your device's wifi to a known mode. Your device could be starting in WIFI_AP (SoftAP) mode, and if we call ``begin``, which adds station mode, your device would then be in both modes.
 
 .. code:: cpp
 
@@ -68,8 +68,8 @@ wl_mode may be one of the following values of type of ``WiFiMode_t`` as defined 
 - ``WIFI_STA``    1, wifi uses station mode, device can only connect to access points (APs)
 - ``WIFI_AP``     2, wifi uses access point mode, device can only accept connections from stations, it is the AP
 - ``WIFI_AP_STA`` 3, wifi uses two modes, device can simultaneously connect to other APs, and accepts connections from other stations
- 
-For now let's add a line to place our device in station mode.
+
+For now add a line to your code that will place the device in one mode, the station mode.
 
 .. code:: cpp
 
@@ -81,7 +81,7 @@ A related method, ``WiFi.getMode()`` may be used to check the `current wifi mode
 begin
 ^^^^^
 
-There are several ``begin`` `function overloads <https://en.wikipedia.org/wiki/Function_overloading>`__ (versions) declared in . Overloads provide flexibility in number or type of accepted parameters. 
+There are several ``begin`` `function overloads <https://en.wikipedia.org/wiki/Function_overloading>`__ (versions). Overloads provide flexibility in number or type of accepted parameters. ``WiFi.begin`` returns wifi connection `status <#status>`__.
 
 .. code:: cpp
 
@@ -90,31 +90,23 @@ There are several ``begin`` `function overloads <https://en.wikipedia.org/wiki/F
     WiFi.begin(ssid, passphrase, channel, bssid)
     WiFi.begin(ssid, passphrase, channel, bssid, connect)
 
-The begin overloads with params, can result in their args being saved in the 'wifi settings' area of flash. -- see `SDK Connect <#sdk-connect>`__ below.
+Calling one of the begin overloads that accepts params, can result in your args being saved in the 'wifi settings' area of flash. Calling the overload without params, ``WiFi.begin()``, causes the device to use those settings saved in flash. See `SDK Connect <#sdk-connect>`__ for another way to use those settings.
 
-Calling the overload without params ``WiFi.begin()``, forces the use of those settings saved in flash.
-
-When passing  parameters passed to ``begin`` include SSID and passphrase, so module can connect to specific Access Point.
-
-
-Calling it will enable station mode and connect to the last access point saved in flash memory.
-
-Notes:
-- If you notice strange behavior with DNS or other network functionality, check which mode your module is in (see ``WiFi.getMode()`` in the `Generic Class Documentation <generic-class.rst#mode>`__).
-
-Below is the syntax of another overload of ``begin`` with the all possible parameters:
+For a simple sketch to connect to an AP, just two args, SSID and passphrase, need to be passed to ``begin``,
 
 .. code:: cpp
 
-    WiFi.begin(ssid, passphrase, channel, bssid, connect)
+    WiFi.begin(ssid, passphrase)
 
-Meaning of parameters is as follows:
 
-- ``ssid`` - a character string containing the SSID of Access Point we would like to connect to, may have up to 32 characters
-- ``passphrase`` to the access point, strlen max 63, or 64 if a hexadecimal string, while it can be minimum 8, circa core 3, 18 would be appropriate.
-- ``channel`` of AP, if we like to operate using specific channel, some may be faster than others, if this parameter is omitted, time is used to negotiate.
-- ``bssid`` - mac address of AP, this parameter is also optional, but will make connections quicker, as some net scanning may be skipped.
-- ``connect`` - a ``boolean`` parameter that if set to ``false``, will instruct module just to save the other parameters without actually establishing connection to the access point
+Meaning of optional parameters is as follows:
+
+- ``ssid`` - a string containing the SSID of the AP to connect to, max string length is 32 characters.
+- ``passphrase`` to the AP, strlen max 63, or 64 if a hexadecimal string, while the minimum is 8, in the early 2020's 18 would be better.
+- ``channel`` may depend on AP settings, how busy the channels are, specify 0 (zero) if unsure and your device and the AP should negotiate a channel.
+- ``bssid`` - mac address of AP, but will make connections quicker, as some wifi scanning may be skipped.
+- ``connect`` - a boolean (true/false) parameter by default true, after saving the wifi settings, attempt to connect to the AP.
+
 
 config
 ^^^^^^
