@@ -17,7 +17,7 @@ Table of Contents
    -  `mode <#mode>`__
    -  `begin <#begin>`__
    -  `config <#config>`__
-   -  `SDK Connect <#sdk-connect>`__
+   -  `SDK connect <#sdk-connect>`__
 
 -  `Manage Connection <#manage-connection>`__
 
