@@ -138,12 +138,13 @@ Meaning of parameters is as follows:
 
     #include <ESP8266WiFi.h>
 
-    const char* ssid = "********";
+    const char* ssid = "sensor-net";
     const char* passphrase = "****************";
 
-    IPAddress staticIP(192,168,1,22);
+    IPAddress staIP(192,168,1,22);
     IPAddress gateway(192,168,1,9);
     IPAddress subnet(255,255,255,0);
+    IPAddress dns1 = gateway;              // required to get IPs of external network hostnames
 
     void setup(void)
     {
@@ -151,7 +152,9 @@ Meaning of parameters is as follows:
       Serial.println();
 
       Serial.printf("Connecting to %s\n", ssid);
-      WiFi.config(staticIP, gateway, subnet);
+      if (! WiFi.config(staIP, gateway, subnet, dns1)) {
+         Serial.println(F("WiFi.config failed; check the defined IPs; falling back to DHCP"));
+      }
       WiFi.begin(ssid, passphrase);
       while (WiFi.status() != WL_CONNECTED)
       {
@@ -159,7 +162,7 @@ Meaning of parameters is as follows:
         Serial.print(".");
       }
       Serial.println();
-      Serial.print("Connected, IP address: ");
+      Serial.print("Connected to wifi, and station has IP: ");
       Serial.println(WiFi.localIP());
     }
 
@@ -171,7 +174,7 @@ Meaning of parameters is as follows:
 
     Connecting to sensor-net
     .
-    Connected, IP address: 192.168.1.22
+    Connected to wifi, and station has IP: 192.168.1.22
 
 Please note that station with static IP configuration usually connects to the network faster. In the above example it took about 500ms (one dot `.` displayed). This is because obtaining of IP configuration by DHCP client takes time and in this case this step is skipped. If you pass all three parameter as 0.0.0.0 (local_ip, gateway and subnet), it will re enable DHCP. You need to re-connect the device to get new IPs.
 
