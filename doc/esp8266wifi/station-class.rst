@@ -90,15 +90,6 @@ There are several ``begin`` `function overloads <https://en.wikipedia.org/wiki/F
     WiFi.begin(ssid, passphrase, channel, bssid)
     WiFi.begin(ssid, passphrase, channel, bssid, connect)
 
-Calling one of the begin overloads that accepts params, can result in your args being saved in the 'wifi settings' area of flash. Calling the overload without params, ``WiFi.begin()``, causes the device to use those settings saved in flash. See `SDK Connect <#sdk-connect>`__ for another way to use those settings.
-
-For a simple sketch to connect to an AP, just two args, SSID and passphrase, need to be passed to ``begin``,
-
-.. code:: cpp
-
-    WiFi.begin(ssid, passphrase)
-
-
 Meaning of optional parameters is as follows:
 
 - ``ssid`` - a string containing the SSID of the AP to connect to, max string length is 32 characters.
@@ -106,6 +97,15 @@ Meaning of optional parameters is as follows:
 - ``channel`` may depend on AP settings, how busy the channels are, specify 0 (zero) if unsure and your device and the AP should negotiate a channel.
 - ``bssid`` - mac address of AP, but will make connections quicker, as some wifi scanning may be skipped.
 - ``connect`` - a boolean (true/false) parameter by default true, after saving the wifi settings, attempt to connect to the AP.
+
+
+Calling one of the begin overloads that accepts params, can result in your args being saved in the 'wifi settings' area of flash. Calling the overload without params, ``WiFi.begin()``, causes the device to use those settings saved in flash. See `SDK Connect <#sdk-connect>`__ for another way to use those settings.
+
+For a simple sketch to connect to an AP, just two args, SSID and passphrase, need to be passed
+
+.. code:: cpp
+
+    WiFi.begin(ssid, passphrase)
 
 
 config
