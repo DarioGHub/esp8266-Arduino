@@ -111,7 +111,7 @@ For a simple sketch to connect to an AP, just two args, SSID and passphrase, nee
 config
 ^^^^^^
 
-Configure static IP addresses for the station, thus disabling the `DHCP <https://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol>`__ (Dynamic Host Configuration Protocol) client. ``WiFi.config`` is called when we want the device to be ready quicker, or if we need the device to have the same IP each time it starts. Without overloads, ``WiFi.config`` can be still be called serveral ways. The first three params are required.
+Configure static IP addresses for the station, thus disabling the Dynamic Host Configuration Protocol `(DHCP <https://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol>`__) client. ``WiFi.config`` is called when we want the device to be ready quicker, or if we need the device to have the same IP each time it starts. Without overloads, ``WiFi.config`` can be still be called serveral ways. The first three params are required.
 
 .. code:: cpp
 
