@@ -119,12 +119,7 @@ Configure static IP addresses for the station, thus disabling the `DHCP <https:/
     WiFi.config(local_ip, gateway, subnet, dns1)
     WiFi.config(local_ip, gateway, subnet, dns1, dns2)
 
-``WiFi.config`` returns bool (true or false). ``true`` if IP addresses were recorded successfully, otherwise ``false``. Misconfiguration can cause the failure, if for example:
-
--  the module is not in station or station + soft access point mode
--  the local_ip and gateway are specified in different subnets, ``WiFi.config ({192,168,2,64},{192,168,1,254},{255,255,255,0});``
-
-The following IP configuration may be provided:
+Meaning of optional parameters is as follows:
 
 -  ``local_ip`` - enter here IP address you would like to assign the ESP
    station's interface
@@ -136,6 +131,11 @@ The following IP configuration may be provided:
    Domain Name Servers (DNS) that maintain a directory of domain names
    (like e.g. *www.google.co.uk*) and translate them for us to IP
    addresses
+
+``WiFi.config`` returns bool (true or false). ``true`` if IP addresses were recorded successfully, otherwise ``false``. Misconfiguration can cause the failure, if for example:
+
+-  the module is not in station or station + soft access point mode
+-  the local_ip and gateway are specified in different subnets, ``WiFi.config ({192,168,2,64},{192,168,1,254},{255,255,255,0});``
 
 *Example code:*
 
