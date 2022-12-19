@@ -56,7 +56,7 @@ Start to Connect Wifi
 mode
 ^^^^
 
-Prior to attempting to connect your device to a wifi access point (AP), set your device's wifi to a known mode. Your device could be starting in WIFI_AP (SoftAP) mode, and if we call ``begin``, which adds station mode, your device would then be in both modes.
+Prior to attempting to connect your device to a wifi access point (AP), set your device's wifi to a known mode. Your device could be starting in WIFI_AP (SoftAP) mode, and if you call ``begin``, which adds station mode, your device would then be in both modes.
 
 .. code:: cpp
 
@@ -119,7 +119,8 @@ Configure static IP addresses for the station, thus disabling the `DHCP <https:/
     WiFi.config(local_ip, gateway, subnet, dns1)
     WiFi.config(local_ip, gateway, subnet, dns1, dns2)
 
-``WiFi.config`` returns bool (true or false). ``true`` if configuration change is applied successfully. ``false`` if configuration could not be applied, if for example:
+``WiFi.config`` returns bool (true or false). ``true`` if IP addresses were recorded successfully, otherwise ``false``. Misconfiguration can cause the failure, if for example:
+
 -  the module is not in station or station + soft access point mode
 -  the local_ip and gateway are specified in different subnets, ``WiFi.config ({192,168,2,64},{192,168,1,254},{255,255,255,0});``
 
