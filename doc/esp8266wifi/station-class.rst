@@ -119,18 +119,13 @@ Configure static IP addresses for the station, thus disabling the `DHCP <https:/
     WiFi.config(local_ip, gateway, subnet, dns1)
     WiFi.config(local_ip, gateway, subnet, dns1, dns2)
 
-Meaning of optional parameters is as follows:
+Meaning of parameters is as follows:
 
--  ``local_ip`` - enter here IP address you would like to assign the ESP
-   station's interface
--  ``gateway`` - should contain IP address of gateway (a router) to
-   access external networks
--  ``subnet`` - this is a mask that defines the range of IP addresses of
-   the local network
--  ``dns1``, ``dns2`` - optional parameters that define IP addresses of
-   Domain Name Servers (DNS) that maintain a directory of domain names
-   (like e.g. *www.google.co.uk*) and translate them for us to IP
-   addresses
+-  ``local_ip`` - the IP address you would like to assign the ESP station's interface
+-  ``gateway`` - must contain IP address of a gateway (router) on the local subnet, so the ESP can access networks outside (external to) the local subnet
+-  ``subnet`` - a mask that defines the range of IP addresses of the local network
+-  ``dns1`` - specify IP address of a Domain Name System (`DNS <https://wikipedia.org/wiki/Domain_Name_System>`__) server, required if the ESP needs access to names on external networks, eg. public domain names
+-  ``dns2`` - optional IP address of a 2nd DNS server
 
 ``WiFi.config`` returns bool (true or false). ``true`` if IP addresses were recorded successfully, otherwise ``false``. Misconfiguration can cause the failure, if for example:
 
