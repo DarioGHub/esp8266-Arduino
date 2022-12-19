@@ -5,7 +5,7 @@ Station Class
 
 The number of features provided by ESP8266 in the station mode is far more extensive than covered in original `Arduino WiFi library <https://www.arduino.cc/en/Reference/WiFi>`__. Therefore, instead of supplementing original documentation, we have decided to write a new one from scratch.
 
-This page is based on the `source code <https://github.com/esp8266/Arduino/blob/master/>`__.
+This page is based on the `source code <https://github.com/esp8266/Arduino/>`__.
 
 Description of station class has been broken down into four parts. First discusses methods to connect to an access point (AP). Second provides methods to manage the connection like e.g. ``reconnect`` or ``isConnected``. Third covers properties to obtain information about the connection like MAC or IP address. Finally the fourth section provides alternate methods to connect like e.g. Wi-Fi Protected Setup (WPS).
 
