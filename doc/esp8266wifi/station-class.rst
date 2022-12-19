@@ -111,7 +111,7 @@ For a simple sketch to connect to an AP, just two args, SSID and passphrase, nee
 config
 ^^^^^^
 
-Configure static IP addresses for the station, thus disabling the Dynamic Host Configuration Protocol `(DHCP <https://wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol>`__) client. ``WiFi.config`` is called when we want the device to be ready quicker, or if we need the device to have the same IP each time it starts. Without overloads, ``WiFi.config`` can be still be called serveral ways. The first three params are required.
+Configure static IP addresses for the station, thus disabling the Dynamic Host Configuration Protocol `(DHCP <https://wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol>`__) client. ``WiFi.config`` is called when we want the device to be ready quicker, or if we need the device to have the same IP each time it starts. Without overloads, ``WiFi.config`` can be still be called serveral ways.
 
 .. code:: cpp
 
@@ -119,18 +119,17 @@ Configure static IP addresses for the station, thus disabling the Dynamic Host C
     WiFi.config(local_ip, gateway, subnet, dns1)
     WiFi.config(local_ip, gateway, subnet, dns1, dns2)
 
-Meaning of parameters is as follows:
+Meaning of parameters is as follows (first three are required):
 
 -  ``local_ip`` - the IP address you would like to assign the ESP station's interface
 -  ``gateway`` - must contain IP address of a gateway (router) on the local subnet, so the ESP can access networks outside (external to) the local subnet
 -  ``subnet`` - a mask that defines the range of IP addresses of the local network
--  ``dns1`` - specify IP address of a Domain Name System (`DNS <https://wikipedia.org/wiki/Domain_Name_System>`__) server, required if the ESP needs access to names on external networks, eg. public domain names
+-  ``dns1`` - specify IP address of a Domain Name System (`DNS <https://wikipedia.org/wiki/Domain_Name_System>`__) server, required if the ESP communicates by hostname with hosts on external or public networks, eg. github.com
 -  ``dns2`` - optional IP address of a 2nd DNS server
 
 ``WiFi.config`` returns bool (true or false). ``true`` if IP addresses were recorded successfully, otherwise ``false``. Misconfiguration can cause the failure, if for example:
 
--  the module is not in station or station + soft access point mode
--  the local_ip and gateway are specified in different subnets, ``WiFi.config ({192,168,2,64},{192,168,1,254},{255,255,255,0});``
+-  the local_ip and gateway are specified in different subnets, eg. ``WiFi.config ({192,168,2,64},{192,168,1,254},{255,255,255,0});``
 
 *Example code:*
 
@@ -182,24 +181,24 @@ Please note that station with static IP configuration usually connects to the ne
 SDK Connect
 ^^^^^^^^^^^
 
-SDK auto connect can be twice as fast as begin, partly because it runs before user code. How fast? Expect 1st connection around the 220 ms mark, while reconnects take about 160 ms, on a not very busy wlan with a signal strength about -60dB. The SDK connect method is valuable to projects that demand the quickest wifi ready. For example, if battery powered, the esp8266 can turn off the radio about a 1/4 second sooner than with begin.
+SDK auto connect can be twice as fast as begin, partly because it runs before user code. How fast? Expect 1st connection around the 220 ms mark, while reconnects take about 160 ms, on a not very busy wlan with a signal strength about -60dB. The SDK connect method is valuable to projects that demand the quickest IP ready. For example, if battery powered, the ESP can turn off the radio about a 1/4 second sooner than with begin.
 
-SDK connect completely relies on the correct wifi settings saved in flash. If the settings need updating, we can call begin one time. We don't even have to connect (5th param false as in the example code below). The more args you pass to begin, the quicker the connections will be.
+SDK connect relies on correct wifi settings saved in flash. If the settings need updating, we can call begin one time. We don't even have to connect (5th param false as in the example code below), but should pass a channel and bssid for the quickest connections.
 
-WiFi.config can also make SDK connect a little quicker, but it really helps begin much more. Try it.
+Use WiFi.config, if you can, early in setup() to speed up SDK and ``begin`` connections.
 
 *Example code:*
 
 .. code:: cpp
 
-   #define MS Serial.print(millis());  Serial.write(' ');
+   #define MS Serial.print(millis());  Serial.print(" ms ");
 
    #include <ESP8266WiFi.h>
 
    const char* ssid        = "********";                           // max strlen 32
    const char* passkey     = "****************";                   // max strlen 63, or 64 if hexadecimal string
    int8_t      channel     = 1;                                    // choose the fastest/best on local wlan
-   uint8_t     bssid[6]    = {0xA4, 0xB1, 0xE9, 0xCD, 0x6B, 0x29}; // can use wifiscan example, or AP's web mgmt site, to get bssid
+   uint8_t     bssid[6]    = {0xA4, 0xB1, 0xE9, 0xCD, 0x6B, 0x29}; // get with wifiscan example, or AP's web site
 
    IPAddress staIP         = {192,168,1,69};
    IPAddress gateway       = {192,168,1,254};
@@ -219,7 +218,7 @@ WiFi.config can also make SDK connect a little quicker, but it really helps begi
        struct station_config wl_args;
        wifi_station_get_config (&wl_args);
        if (strcmp(reinterpret_cast<const char*>(wl_args.ssid), ssid) != 0 ||
-           strcmp(reinterpret_cast<const char*>(wl_args.password), passkey) != 0) {          // need to erase/rewrite station_config
+           strcmp(reinterpret_cast<const char*>(wl_args.password), passkey) != 0) {  // need to erase/rewrite station_config
            if (WiFi.getMode() != 1) WiFi.mode(WIFI_STA);
            WiFi.persistent(true);          // needed persist(true) or enableWiFiAtBootTime(), or settings not saved to flash
            wl_status_t ret = WiFi.begin(ssid, passkey, channel, bssid, false);  // do not connect, but write flash if different
@@ -235,7 +234,7 @@ WiFi.config can also make SDK connect a little quicker, but it really helps begi
        if (WiFi.status() == WL_CONNECTED && waitWifi) {  // async wait, do something in the ms you wait for wifi
            MS Serial.println("WL_CONNECTED");
            // cycle wifi mode thru off back to sta, adds about 190 ms here to slow down this demo
-           // WiFi.mode(WIFI_OFF);  WiFi.mode(WIFI_STA);  // comment to run full speed, OFF disconnects but does not erase flash wifi settings
+           // WiFi.mode(WIFI_OFF);  WiFi.mode(WIFI_STA);  // comment to run full speed, OFF does not erase flash settings
            waitWifi = WiFi.reconnect();
            MS Serial.println("Attempting to reconnect wifi...");
        }
@@ -245,9 +244,9 @@ WiFi.config can also make SDK connect a little quicker, but it really helps begi
 
 ::
 
-   216 WL_CONNECTED
-   223 Attempting to reconnect wifi...
-   377 WL_CONNECTED
+   216 ms WL_CONNECTED
+   223 ms Attempting to reconnect wifi...
+   377 ms WL_CONNECTED
 
 
 
@@ -257,7 +256,7 @@ Manage Connection
 reconnect
 ^^^^^^^^^
 
-Reconnect the station. This is done by disconnecting from the access point an then initiating connection back to the same AP. 
+Reconnect the station. This is done by disconnecting from the access point and then initiating connection back to the same AP. 
 By default, ESP will attempt to reconnect to Wi-Fi network whenever it is disconnected. There is no need to handle this by separate code. A good way to simulate disconnection would be to reset the access point. ESP will report disconnection, and then try to reconnect automatically.
 
 
