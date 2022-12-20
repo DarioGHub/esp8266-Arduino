@@ -168,7 +168,7 @@ The DHCP client may be reenabled, so the module receives a new DHCP IP configura
 SDK Connect
 ^^^^^^^^^^^
 
-The SDK can connect 2x quicker than ``begin``, partly because it runs before user code. How fast? To a not very busy AP with good signal strength (-60dB), expect modules to be connected around the 220 millisecond mark, while later reconnects may take about 160 ms. The SDK connect method is valuable to projects that demand the quickest IP ready module. For example, battery powered ESPs can save mAh by turn off the radio about a 1/4 second sooner than when using ``begin``.
+The SDK can connect 2x quicker than ``begin``, partly because it runs before user code. How fast? To a not very busy AP with good signal strength (-60dB), expect modules to connect around the 220 millisecond mark, while later reconnects may take about 160 ms. The SDK connect method is valuable to projects that demand the quickest IP ready module. For example, battery powered ESPs can save mAh by turn off the radio about a 1/4 second sooner than when using ``begin``.
 
 Call ``WiFi.config`` early in setup() to avoid the SDK starting the DHCP client, wasting time, and maybe even getting an unexpected IP address.
 
