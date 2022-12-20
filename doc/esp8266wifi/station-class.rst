@@ -120,7 +120,7 @@ Meaning of parameters is as follows (first three are required):
 .. code:: cpp
 
     IPAddress sta_ip (192,168,1,22);
-    IPAddress gateway (192,168,2,9);         // <- misconfiguration 
+    IPAddress gateway (192,186,1,9);         // <- misconfiguration 
     IPAddress subnet (255,255,255,0);
     IPAddress dns1 = gateway;                // required to get IP of external hostnames
 
@@ -140,7 +140,7 @@ Meaning of parameters is as follows (first three are required):
 ::
     WiFi.config failed; check the defined IPs; falling back to DHCP
 
-DHCP can be reenabled by calling ``WiFi.config ({192,168,1,64},{192,168,1,64},{192,168,1,64})`` The module would then have to ``WiFi.reconnect()`` to get DHCP IP configuration.
+DHCP can be reenabled by calling ``WiFi.config ({0,0,0,0},{0,0,0,0},{0,0,0,0})`` The module would then have to ``WiFi.reconnect()`` to get DHCP IP configuration.
 
 
 SDK Connect
