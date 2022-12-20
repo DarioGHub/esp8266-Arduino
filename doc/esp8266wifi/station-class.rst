@@ -94,7 +94,7 @@ config
 
 Configures static IP addresses for the station, thus disabling the Dynamic Host Configuration Protocol `(DHCP <https://wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol>`__) client. This reduces the time to connect, as obtaining IP configuration by DHCP client takes time. ``WiFi.config`` is also indispensable when the module needs the same IP address each time it starts.
 
-Choose a static IP address for the station that is outside of any DHCP pools used by the AP (router).
+Choose a static IP address for the station that is in the same subnet as the gateway, but outside of DHCP pools used by the AP (router) in that subnet.
 
 ``WiFi.config`` returns bool (true or false). ``true`` if the static IP addresses were recorded successfully, otherwise ``false``. Misconfiguration or typos can cause failure, if for example:
 -  the local_ip and gateway are specified in different subnets, eg. ``WiFi.config ({192,168,2,64},{192,168,1,254},{255,255,255,0});``
