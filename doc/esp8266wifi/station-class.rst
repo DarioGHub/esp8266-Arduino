@@ -97,7 +97,7 @@ Configures static IP addresses for the station, thus disabling the Dynamic Host 
 Choose a static IP address for the station that is in the same subnet as the gateway, but outside of DHCP pools used by the AP (router) in that subnet.
 
 ``WiFi.config`` returns bool (true or false). ``true`` if the static IP addresses were recorded successfully, otherwise ``false``. Misconfiguration or typos can cause failure, if for example:
--  the local_ip and gateway are specified in different subnets, eg. ``WiFi.config ({192,168,2,64},{192,168,1,254},{255,255,255,0});``
+-  the local_ip and gateway are specified in different subnets; see following example code.
 
 ``WiFi.config``, even without overloads, may be called serveral ways:
 
@@ -141,7 +141,7 @@ Meaning of parameters is as follows (first three are required):
 
    WiFi.config failed; check the defined IPs; falling back to DHCP
 
-The DHCP client can be reenabled, so the module receives a new DHCP IP configuration.
+The DHCP client may be reenabled, so the module receives a new DHCP IP configuration.
 
 *Example code:*
 
@@ -168,11 +168,12 @@ The DHCP client can be reenabled, so the module receives a new DHCP IP configura
 SDK Connect
 ^^^^^^^^^^^
 
-SDK auto connect can be twice as fast as begin, partly because it runs before user code. How fast? To a not very busy AP with good signal strength (-60dB), expect start up connections around the 220 ms mark, while later reconnects may take about 160 ms. The SDK connect method is valuable to projects that demand the quickest IP ready module. For example, battery powered ESPs can save mAh by turn off the radio about a 1/4 second sooner than when using ``begin``.
+SDK auto connect can be twice as fast as begin, partly because it runs before user code. How fast? To a not very busy AP with good signal strength (-60dB), expect start up connections around the 220 millisecond mark, while later reconnects may take about 160 ms. The SDK connect method is valuable to projects that demand the quickest IP ready module. For example, battery powered ESPs can save mAh by turn off the radio about a 1/4 second sooner than when using ``begin``.
 
-SDK connect relies on correct wifi settings saved in flash. If the settings need updating, we can call begin one time. We don't even have to connect (5th param false as in the example code below), but as noted in the `begin section <#begin>`__ above, a channel and bssid should be passed for the quickest connections.
+Call ``WiFi.config`` early in setup(), to avoid the SDK starting the DHCP client which takes more time, and maybe even getting an unexpected IP address.
 
-Use ``WiFi.config`` if you can, early in setup() to speed up SDK and ``begin`` connections.
+SDK connect relies on correct wifi settings saved in flash. If the settings need updating, call ``begin`` one time. The module does not have to connect to the AP (5th param false as in the following example code), but as noted in the `begin section <#begin>`__ above, a channel and bssid should be passed for the quickest connections.
+
 
 *Example code:*
 
@@ -218,10 +219,10 @@ Use ``WiFi.config`` if you can, early in setup() to speed up SDK and ``begin`` c
    void loop()
    {
        static bool waitWifi = true;
-       if (WiFi.status() == WL_CONNECTED && waitWifi) {  // async wait, do something in the ms you wait for wifi
+       if (WiFi.status() == WL_CONNECTED && waitWifi) {  // cooperative (async) wait, check a sensor or something while waiting
            MS Serial.println("WL_CONNECTED");
-           // cycle wifi mode thru off back to sta, adds about 190 ms here to slow down this demo
-           // WiFi.mode(WIFI_OFF);  WiFi.mode(WIFI_STA);  // comment to run full speed, OFF does not erase flash settings
+           // uncomment next line to slow reconnects an additional 190 ms; less stress on the serial monitor :)
+           // WiFi.mode(WIFI_OFF);  WiFi.mode(WIFI_STA);  // WIFI_OFF does not erase flash settings
            waitWifi = WiFi.reconnect();
            MS Serial.println("Attempting to reconnect wifi...");
        }
