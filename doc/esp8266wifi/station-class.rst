@@ -470,14 +470,6 @@ With the input parameter ``dns_no`` we can specify which Domain Name Server's IP
 
     DNS #1, #2 IP: 62.179.1.60, 62.179.1.61
 
-getMode
-^^^^^^^
-
-Returns the device's current wifi mode. Not specific to the station class, but related.
-
-.. code:: cpp
-
-    WiFi.getMode()
 
 hostname
 ^^^^^^^^
