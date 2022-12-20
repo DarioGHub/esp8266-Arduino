@@ -168,11 +168,11 @@ The DHCP client can be reenabled, so the module receives a new DHCP IP configura
 SDK Connect
 ^^^^^^^^^^^
 
-SDK auto connect can be twice as fast as begin, partly because it runs before user code. How fast? Expect 1st connection around the 220 ms mark, while reconnects take about 160 ms, on a not very busy wlan with a signal strength about -60dB. The SDK connect method is valuable to projects that demand the quickest IP ready. For example, if battery powered, the ESP can turn off the radio about a 1/4 second sooner than with begin.
+SDK auto connect can be twice as fast as begin, partly because it runs before user code. How fast? To a not very busy AP with good signal strength (-60dB), expect start up connections around the 220 ms mark, while later reconnects may take about 160 ms. The SDK connect method is valuable to projects that demand the quickest IP ready module. For example, battery powered ESPs can save mAh by turn off the radio about a 1/4 second sooner than when using ``begin``.
 
-SDK connect relies on correct wifi settings saved in flash. If the settings need updating, we can call begin one time. We don't even have to connect (5th param false as in the example code below), but should pass a channel and bssid for the quickest connections.
+SDK connect relies on correct wifi settings saved in flash. If the settings need updating, we can call begin one time. We don't even have to connect (5th param false as in the example code below), but as noted in the `begin section <#begin>`__ above, a channel and bssid should be passed for the quickest connections.
 
-Use WiFi.config, if you can, early in setup() to speed up SDK and ``begin`` connections.
+Use ``WiFi.config`` if you can, early in setup() to speed up SDK and ``begin`` connections.
 
 *Example code:*
 
@@ -187,7 +187,7 @@ Use WiFi.config, if you can, early in setup() to speed up SDK and ``begin`` conn
    int8_t      channel     = 1;                                    // choose the fastest/best on local wlan
    uint8_t     bssid[6]    = {0xA4, 0xB1, 0xE9, 0xCD, 0x6B, 0x29}; // get with wifiscan example, or AP's web site
 
-   IPAddress staIP         = {192,168,1,69};
+   IPAddress staIP         = {192,168,1,50};
    IPAddress gateway       = {192,168,1,254};
    IPAddress subnet        = {255,255,255,0};
 
@@ -201,7 +201,7 @@ Use WiFi.config, if you can, early in setup() to speed up SDK and ``begin`` conn
        }
 
        // Do we need to call begin to write new wifi settings in flash?
-       //  Only if sketch & flash settings are different (changed), else just wait for sdk to connect
+       //  Only if sketch & flash settings are different, else just wait for sdk to connect
        struct station_config wl_args;
        wifi_station_get_config (&wl_args);
        if (strcmp(reinterpret_cast<const char*>(wl_args.ssid), ssid) != 0 ||
