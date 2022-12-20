@@ -112,7 +112,7 @@ Meaning of parameters is as follows (first three are required):
 -  ``sta_ip`` - the IP address you would like to assign the ESP station's interface
 -  ``gateway`` - must contain IP address of a gateway (router) on the local subnet, so the ESP can access networks outside (external to) the local subnet
 -  ``subnet`` - a mask that defines the range of IP addresses of the local network
--  ``dns1`` - specify IP address of a Domain Name System (`DNS <https://wikipedia.org/wiki/Domain_Name_System>`__) server, required if the ESP communicates by hostname with hosts on external or public networks, eg. github.com
+-  ``dns1`` - specify IP address of a Domain Name System (`DNS <https://wikipedia.org/wiki/Domain_Name_System>`__) server, required if the ESP needs to get IPs of external (outside of the local subnet) hostnames, eg. github.com
 -  ``dns2`` - optional IP address of a 2nd DNS server
 
 *Example code:*
@@ -122,7 +122,7 @@ Meaning of parameters is as follows (first three are required):
     IPAddress sta_ip (192,168,1,22);
     IPAddress gateway (192,168,2,9);         // <- misconfiguration 
     IPAddress subnet (255,255,255,0);
-    IPAddress dns1 = gateway;                // required to get IPs of external network hostnames
+    IPAddress dns1 = gateway;                // required to get IP of external hostnames
 
     void setup(void)
     {
@@ -140,7 +140,7 @@ Meaning of parameters is as follows (first three are required):
 ::
     WiFi.config failed; check the defined IPs; falling back to DHCP
 
-If you pass all three parameter as 0.0.0.0 (local_ip, gateway and subnet), it will re enable DHCP. You need to re-connect the device to get new IPs.
+DHCP can be reenabled by calling ``WiFi.config ({192,168,1,64},{192,168,1,64},{192,168,1,64})`` The module would then have to ``WiFi.reconnect()`` to get DHCP IP configuration.
 
 
 SDK Connect
