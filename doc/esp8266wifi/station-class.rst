@@ -141,7 +141,28 @@ Meaning of parameters is as follows (first three are required):
 
    WiFi.config failed; check the defined IPs; falling back to DHCP
 
-DHCP can be reenabled by calling ``WiFi.config ({0,0,0,0},{0,0,0,0},{0,0,0,0})`` The module would then have to ``WiFi.reconnect()`` to get DHCP IP configuration.
+The DHCP client can be reenabled, so the module receives a new DHCP IP configuration.
+
+*Example code:*
+
+.. code:: cpp
+
+    if (! WiFi.config ({0,0,0,0},{0,0,0,0},{0,0,0,0})) {
+        Serial.println(F("WiFi.config could not reenable DHCP client"));
+    } else {
+        Serial.println(F("Calling WiFi.reconnect()..."));
+        if (! WiFi.reconnect()) {
+            Serial.println(F("Failed to initiate WiFi.reconnect."));
+        } else {
+            Serial.println(F("Blocking while reconnecting..."));
+            while (WiFi.status() != WL_CONNECTED) { yield(); }
+            Serial.printf(PSTR("Station IP: %s\n"), WiFi.localIP().toString().c_str());
+            Serial.printf(PSTR("Gataway IP: %s\n"), WiFi.gatewayIP().toString().c_str());
+            Serial.printf(PSTR("SubnetMask: %s\n"), WiFi.subnetMask().toString().c_str());
+            Serial.print(F("DNS servers: (0):"));  Serial.print(WiFi.dnsIP(0));
+            Serial.print(F(", (1):"));  Serial.println(WiFi.dnsIP(1));
+        }
+    }
 
 
 SDK Connect
