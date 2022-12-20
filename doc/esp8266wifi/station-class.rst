@@ -63,7 +63,7 @@ Before connecting a module to a wifi access point (AP), set the module's wifi to
 begin
 ^^^^^
 
-There are several ``begin`` `function overloads <https://en.wikipedia.org/wiki/Function_overloading>`__ (versions). Overloads provide flexibility in number or type of accepted parameters. ``WiFi.begin`` returns wifi connection `status <#status>`__.
+There are several ``begin`` `function overloads <https://en.wikipedia.org/wiki/Function_overloading>`__. Overloads provide flexibility in number or type of accepted parameters. ``WiFi.begin`` returns wifi connection `status <#status>`__.
 
 .. code:: cpp
 
@@ -80,38 +80,38 @@ Meaning of optional parameters is as follows:
 - ``bssid`` - mac address of AP, but will make connections quicker, as some wifi scanning may be skipped.
 - ``connect`` - a boolean (true/false) parameter by default true, after saving the wifi settings, attempt to connect to the AP.
 
+Calling begin with args, can result in those args being saved in the 'wifi settings' area of flash. Calling ``WiFi.begin()`` without args, causes the module to use those saved settings. See `SDK Connect <#sdk-connect>`__ for an alternative to begin.
 
-Calling one of the begin overloads that accepts params, can result in your args being saved in the 'wifi settings' area of flash. Calling the overload without params, ``WiFi.begin()``, causes the device to use those settings saved in flash. See `SDK Connect <#sdk-connect>`__ for another way to use those settings.
-
-For a simple sketch to connect to an AP, just two args, SSID and passphrase, need to be passed
+For now, use the slower, but more flexible overload
 
 .. code:: cpp
 
-    WiFi.begin(ssid, passphrase)
+    WiFi.begin(ssid, passphrase);
 
 
 config
 ^^^^^^
 
-Configure static IP addresses for the station, thus disabling the Dynamic Host Configuration Protocol `(DHCP <https://wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol>`__) client. ``WiFi.config`` is called when we want the device to be ready quicker, or if we need the device to have the same IP each time it starts. Without overloads, ``WiFi.config`` can be still be called serveral ways.
+Configures static IP addresses for the station, thus disabling the Dynamic Host Configuration Protocol `(DHCP <https://wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol>`__) client. Specify a static station IP address outside of any DHCP pools used by the AP (router).
+``WiFi.config`` returns bool (true or false). ``true`` if the static IP addresses were recorded successfully, otherwise ``false``. Misconfiguration or typos can cause failure, if for example:
+-  the local_ip and gateway are specified in different subnets, eg. ``WiFi.config ({192,168,2,64},{192,168,1,254},{255,255,255,0});``
+Without overloads, ``WiFi.config`` can be still be called serveral ways.
 
 .. code:: cpp
 
-    WiFi.config(local_ip, gateway, subnet)
-    WiFi.config(local_ip, gateway, subnet, dns1)
-    WiFi.config(local_ip, gateway, subnet, dns1, dns2)
+    WiFi.config(sta_ip, gateway, subnet)
+    WiFi.config(sta_ip, gateway, subnet, dns1)
+    WiFi.config(sta_ip, gateway, subnet, dns1, dns2)
 
 Meaning of parameters is as follows (first three are required):
 
--  ``local_ip`` - the IP address you would like to assign the ESP station's interface
+-  ``sta_ip`` - the IP address you would like to assign the ESP station's interface
 -  ``gateway`` - must contain IP address of a gateway (router) on the local subnet, so the ESP can access networks outside (external to) the local subnet
 -  ``subnet`` - a mask that defines the range of IP addresses of the local network
 -  ``dns1`` - specify IP address of a Domain Name System (`DNS <https://wikipedia.org/wiki/Domain_Name_System>`__) server, required if the ESP communicates by hostname with hosts on external or public networks, eg. github.com
 -  ``dns2`` - optional IP address of a 2nd DNS server
 
-``WiFi.config`` returns bool (true or false). ``true`` if IP addresses were recorded successfully, otherwise ``false``. Misconfiguration can cause the failure, if for example:
-
--  the local_ip and gateway are specified in different subnets, eg. ``WiFi.config ({192,168,2,64},{192,168,1,254},{255,255,255,0});``
+``WiFi.config`` is called to speed up connection, or if the module needs the same IP each time it starts.
 
 *Example code:*
 
