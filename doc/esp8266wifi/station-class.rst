@@ -82,7 +82,7 @@ Meaning of optional parameters is as follows:
 
 Calling begin with args, can result in those args being saved in the 'wifi settings' area of flash. Calling ``WiFi.begin()`` without args, causes the module to use those saved settings. See `SDK Connect <#sdk-connect>`__ for an alternative to begin.
 
-For now, use the slower, but more flexible overload
+For now, use the slower, but more flexible overload:
 
 .. code:: cpp
 
@@ -99,7 +99,7 @@ Choose a static IP address for the station that is outside of any DHCP pools use
 ``WiFi.config`` returns bool (true or false). ``true`` if the static IP addresses were recorded successfully, otherwise ``false``. Misconfiguration or typos can cause failure, if for example:
 -  the local_ip and gateway are specified in different subnets, eg. ``WiFi.config ({192,168,2,64},{192,168,1,254},{255,255,255,0});``
 
-``WiFi.config``, even without overloads, can be called serveral ways:
+``WiFi.config``, even without overloads, may be called serveral ways:
 
 .. code:: cpp
 
@@ -138,7 +138,8 @@ Meaning of parameters is as follows (first three are required):
 *Example output:*
 
 ::
-    WiFi.config failed; check the defined IPs; falling back to DHCP
+
+   WiFi.config failed; check the defined IPs; falling back to DHCP
 
 DHCP can be reenabled by calling ``WiFi.config ({0,0,0,0},{0,0,0,0},{0,0,0,0})`` The module would then have to ``WiFi.reconnect()`` to get DHCP IP configuration.
 
