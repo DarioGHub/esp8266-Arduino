@@ -10,9 +10,8 @@ Description of station class has been broken down into four parts. First discuss
 Table of Contents
 -----------------
 
--  `Connect to Wifi <#start-here>`__
+-  `Connect Wifi <#connect-wifi>`__
 
-   -  `mode <#mode>`__
    -  `begin <#begin>`__
    -  `config <#config>`__
    -  `SDK connect <#sdk-connect>`__
@@ -50,32 +49,15 @@ Points below provide description and code snippets how to use particular methods
 
 For more code samples please refer to separate section with `examples <station-examples.rst>`__ dedicated specifically to the Station Class.
 
-Start to Connect Wifi
-~~~~~~~~~~~~~~~~~~~~~
 
-mode
-^^^^
+Connect Wifi
+~~~~~~~~~~~~
 
-Prior to connecting your device to a wifi access point (AP), set your device's wifi to a known mode, defined in `Generic Class <generic-class.rst#mode>`__. Your device could be starting in WIFI_AP (SoftAP) mode, and if you call ``begin``, which adds station mode, your device would then be in both modes.
-
-.. code:: cpp
-
-    WiFi.mode(wl_mode)
-
-wl_mode may be one of the following values of type of ``WiFiMode_t`` as defined in `wl\_ESP8266WiFiType.h <https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WiFi/src/ESP8266WiFiType.h>`__
-
-- ``WIFI_OFF``    0, wifi turned off
-- ``WIFI_STA``    1, wifi uses station mode, device can only connect to access points (APs)
-- ``WIFI_AP``     2, wifi uses access point mode, device can only accept connections from stations, it is the AP
-- ``WIFI_AP_STA`` 3, wifi uses two modes, device can simultaneously connect to other APs, and accepts connections from other stations
-
-For now add a line to your code that will place the device in one mode, the station mode.
+Before connecting a module to a wifi access point (AP), set the module's wifi to a known `mode <generic-class.rst#mode>`__. Many modules start in WIFI_AP (SoftAP) mode, so then calling ``begin``, which adds station mode, would place the device in the dual sta + softAP mode. For now, only the station mode is needed
 
 .. code:: cpp
 
     WiFi.mode(WIFI_STA);
-
-A related method, ``WiFi.getMode()`` may be used to check the `current wifi mode <#getMode>`__.
 
 
 begin
