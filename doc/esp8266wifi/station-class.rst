@@ -56,7 +56,7 @@ Start to Connect Wifi
 mode
 ^^^^
 
-Prior to attempting to connect your device to a wifi access point (AP), set your device's wifi to a known mode. Your device could be starting in WIFI_AP (SoftAP) mode, and if you call ``begin``, which adds station mode, your device would then be in both modes.
+Prior to connecting your device to a wifi access point (AP), set your device's wifi to a known mode, defined in `Generic Class <generic-class.rst#mode>`__. Your device could be starting in WIFI_AP (SoftAP) mode, and if you call ``begin``, which adds station mode, your device would then be in both modes.
 
 .. code:: cpp
 
