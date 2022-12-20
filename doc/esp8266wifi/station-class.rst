@@ -168,9 +168,9 @@ The DHCP client may be reenabled, so the module receives a new DHCP IP configura
 SDK Connect
 ^^^^^^^^^^^
 
-SDK auto connect can be twice as fast as begin, partly because it runs before user code. How fast? To a not very busy AP with good signal strength (-60dB), expect start up connections around the 220 millisecond mark, while later reconnects may take about 160 ms. The SDK connect method is valuable to projects that demand the quickest IP ready module. For example, battery powered ESPs can save mAh by turn off the radio about a 1/4 second sooner than when using ``begin``.
+The SDK can connect 2x quicker than ``begin``, partly because it runs before user code. How fast? To a not very busy AP with good signal strength (-60dB), expect modules to be connected around the 220 millisecond mark, while later reconnects may take about 160 ms. The SDK connect method is valuable to projects that demand the quickest IP ready module. For example, battery powered ESPs can save mAh by turn off the radio about a 1/4 second sooner than when using ``begin``.
 
-Call ``WiFi.config`` early in setup(), to avoid the SDK starting the DHCP client which takes more time, and maybe even getting an unexpected IP address.
+Call ``WiFi.config`` early in setup() to avoid the SDK starting the DHCP client, wasting time, and maybe even getting an unexpected IP address.
 
 SDK connect relies on correct wifi settings saved in flash. If the settings need updating, call ``begin`` one time. The module does not have to connect to the AP (5th param false as in the following example code), but as noted in the `begin section <#begin>`__ above, a channel and bssid should be passed for the quickest connections.
 
@@ -221,7 +221,7 @@ SDK connect relies on correct wifi settings saved in flash. If the settings need
        static bool waitWifi = true;
        if (WiFi.status() == WL_CONNECTED && waitWifi) {  // cooperative (async) wait, check a sensor or something while waiting
            MS Serial.println("WL_CONNECTED");
-           // uncomment next line to slow reconnects an additional 190 ms; less stress on the serial monitor :)
+           // uncomment next line to slow reconnects an additional 190 ms; less stress on eyes and serial monitor :)
            // WiFi.mode(WIFI_OFF);  WiFi.mode(WIFI_STA);  // WIFI_OFF does not erase flash settings
            waitWifi = WiFi.reconnect();
            MS Serial.println("Attempting to reconnect wifi...");
