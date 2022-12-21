@@ -140,7 +140,7 @@ Meaning of parameters is as follows (first three are required):
 
    WiFi.config failed; check the defined IPs; falling back to DHCP
 
-``WiFi.config`` can revert an IP address configuration from static to DHCP. If the station requires a new DHCP IP configuration, the DHCP client can be reactivated by specifying zero addresses, and a new dynamic address configuration is obtained with a call to ``WiFi.reconnect()``:
+``WiFi.config`` can revert an IP address configuration from static to dynamic. If the station requires a new DHCP configuration, the DHCP client can be reactivated by specifying zero addresses, and the new configuration is obtained with a call to ``WiFi.reconnect()``:
 
 *Example code:*
 
