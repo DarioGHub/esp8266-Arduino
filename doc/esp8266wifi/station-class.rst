@@ -96,8 +96,7 @@ Applies an IP address configuration to a module operating in station mode. Non-z
 
 Choose an address for the station that is in the same subnet as the gateway, but outside any DHCP pools used by the AP (router) in that subnet, or IP address conflicts may arise.
 
-``WiFi.config`` returns bool (true or false). ``true`` if the static IP addresses were recorded successfully, otherwise ``false``. Misconfiguration or typos can cause failure, if for example:
--  the local_ip and gateway are specified in different subnets; see following example code.
+``WiFi.config`` returns bool (true or false). If the IP addresses were recorded successfully, it returns ``true``, otherwise ``false``. Misconfiguration or typos can cause failure, if for example the sta_ip and gateway are specified in different subnets. See the following example code.
 
 ``WiFi.config``, even without overloads, may be called serveral ways:
 
@@ -109,11 +108,11 @@ Choose an address for the station that is in the same subnet as the gateway, but
 
 Meaning of parameters is as follows (first three are required):
 
--  ``sta_ip`` - the IP address you would like to assign the ESP station's interface
--  ``gateway`` - must contain IP address of a gateway (router) on the local subnet, so the ESP can access networks outside (external to) the local subnet
+-  ``sta_ip`` - address you would like assigned to the station's interface
+-  ``gateway`` - address of a gateway (router) on the station's subnet, provides access to external hosts (beyond the local subnet)
 -  ``subnet`` - a mask that defines the range of IP addresses of the local network
--  ``dns1`` - specify IP address of a Domain Name System (`DNS <https://wikipedia.org/wiki/Domain_Name_System>`__) server, required if the ESP needs to get IPs of external (outside of the local subnet) hostnames, eg. github.com
--  ``dns2`` - optional IP address of a 2nd DNS server
+-  ``dns1`` - address of a Domain Name System (`DNS <https://wikipedia.org/wiki/Domain_Name_System>`__) server, required if the station needs to get addresses of external hostnames, eg. github.com
+-  ``dns2`` - optional, address of a 2nd DNS server
 
 *Example code:*
 
