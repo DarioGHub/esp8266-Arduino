@@ -92,9 +92,9 @@ For now, use the slower, but more flexible overload:
 config
 ^^^^^^
 
-Configures static IP addresses for the station, thus disabling the Dynamic Host Configuration Protocol `(DHCP <https://wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol>`__) client. This reduces the time to connect, as obtaining IP configuration by DHCP client takes time. ``WiFi.config`` is also indispensable when the module needs the same IP address each time it starts.
+Applies an IP address configuration to a module operating in station mode. Non-zero addresses specify a static IP address config, which disables the Dynamic Host Configuration Protocol `(DHCP <https://wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol>`__) client. This reduces the time to connect, as DHCP client-server IP conversation is obviated. ``WiFi.config`` is also indispensable when the module needs the same IP address each time it starts.
 
-Choose a static IP address for the station that is in the same subnet as the gateway, but outside of DHCP pools used by the AP (router) in that subnet.
+Choose an address for the station that is in the same subnet as the gateway, but outside any DHCP pools used by the AP (router) in that subnet, or IP address conflicts may arise.
 
 ``WiFi.config`` returns bool (true or false). ``true`` if the static IP addresses were recorded successfully, otherwise ``false``. Misconfiguration or typos can cause failure, if for example:
 -  the local_ip and gateway are specified in different subnets; see following example code.
@@ -141,7 +141,7 @@ Meaning of parameters is as follows (first three are required):
 
    WiFi.config failed; check the defined IPs; falling back to DHCP
 
-The DHCP client may be reenabled, so the module receives a new DHCP IP configuration.
+``WiFi.config`` can revert an IP address configuration from static to DHCP. If the station requires a new DHCP IP configuration, the DHCP client can be reactivated by specifying zero addresses, and a new dynamic address configuration is obtained with a call to ``WiFi.reconnect()``:
 
 *Example code:*
 
@@ -156,9 +156,11 @@ The DHCP client may be reenabled, so the module receives a new DHCP IP configura
         } else {
             Serial.println(F("Blocking while reconnecting..."));
             while (WiFi.status() != WL_CONNECTED) { yield(); }
-            Serial.printf(PSTR("Station IP: %s\n"), WiFi.localIP().toString().c_str());
-            Serial.printf(PSTR("Gataway IP: %s\n"), WiFi.gatewayIP().toString().c_str());
-            Serial.printf(PSTR("SubnetMask: %s\n"), WiFi.subnetMask().toString().c_str());
+            if (-1 == uart_get_debug()) {           // UART_NO(-1), UART0(0), UART1(1), print if setDebugOutput(false)
+               Serial.printf(PSTR("Station IP: %s\n"), WiFi.localIP().toString().c_str());
+               Serial.printf(PSTR("Gataway IP: %s\n"), WiFi.gatewayIP().toString().c_str());
+               Serial.printf(PSTR("SubnetMask: %s\n"), WiFi.subnetMask().toString().c_str());
+            }
             Serial.print(F("DNS servers: (0):"));  Serial.print(WiFi.dnsIP(0));
             Serial.print(F(", (1):"));  Serial.println(WiFi.dnsIP(1));
         }
