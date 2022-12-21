@@ -92,7 +92,7 @@ For now, use the slower, but more flexible overload:
 config
 ^^^^^^
 
-Applies an IP address configuration to a module operating in station mode. Non-zero addresses specify a static IP address config, which disables the Dynamic Host Configuration Protocol `(DHCP <https://wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol>`__) client. This reduces the time to connect, as DHCP client-server IP conversation is obviated. ``WiFi.config`` is also indispensable when the module needs the same IP address each time it starts.
+Applies an IP address configuration to a module operating in station mode. Non-zero addresses specify a static configuration, which disables the Dynamic Host Configuration Protocol `(DHCP <https://wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol>`__) client. This reduces the time to connect, as DHCP client-server IP conversation is obviated. ``WiFi.config`` is also indispensable when the module needs the same IP address each time it starts.
 
 Choose an address for the station that is in the same subnet as the gateway, but outside any DHCP pools used by the AP (router) in that subnet, or IP address conflicts may arise.
 
