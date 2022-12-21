@@ -111,7 +111,7 @@ Meaning of parameters is as follows (first three are required):
 -  ``sta_ip`` - address you would like assigned to the station's interface
 -  ``gateway`` - address of a gateway (router) on the station's subnet, provides access to external hosts (beyond the local subnet)
 -  ``subnet`` - a mask that defines the range of IP addresses of the local network
--  ``dns1`` - address of a Domain Name System (`DNS <https://wikipedia.org/wiki/Domain_Name_System>`__) server, required if the station needs to get addresses of external hostnames, eg. github.com
+-  ``dns1`` - address of a Domain Name System (`DNS <https://wikipedia.org/wiki/Domain_Name_System>`__) server, required to get addresses of external or public hostnames, eg. github.com
 -  ``dns2`` - optional, address of a 2nd DNS server
 
 *Example code:*
